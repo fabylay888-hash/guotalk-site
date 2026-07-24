@@ -87,6 +87,15 @@ h1 em{color:var(--gold);font-style:italic}
 .form input{background:#221c15;border:1px solid rgba(242,195,103,.35);color:var(--text-on-dark);border-radius:14px;padding:15px 18px;font-size:1rem;width:min(340px,80vw);font-family:inherit;outline:none}
 .form input:focus{border-color:var(--gold)}
 .form-msg{margin-top:16px;font-size:.92rem;color:var(--gold);min-height:1.4em}
+.form-msg a{color:var(--gold);font-weight:600}
+
+/* ---------- SHEET GATE ---------- */
+.sheet .form{justify-content:flex-start;margin-top:24px}
+.sheet .form input{background:#fff;border:1px solid rgba(42,33,24,.25);color:var(--text-on-cream)}
+.sheet .form input:focus{border-color:var(--gold-deep)}
+.sheet .form-msg{color:var(--gold-deep);text-align:left}
+.sheet .form-msg a{color:var(--gold-deep)}
+.micro{margin-top:10px;font-size:.78rem;color:var(--muted-on-cream)}
 
 /* ---------- FOOTER ---------- */
 footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
@@ -117,6 +126,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
     <nav class="nav">
       <a class="brand" href="#"><img src="assets/icon_192.png" alt="GuoTalk app icon"><span>GuoTalk</span></a>
       <div>
+        <a class="navlink" href="/blog/">Guides</a>
         <a class="navlink" href="#cheatsheet">Free cheat-sheet</a>
         <a class="navlink" href="#ios">iOS waitlist</a>
       </div>
@@ -163,10 +173,14 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
   <div class="wrap sheet-grid">
     <div>
       <h2 class="serif">Free: the Hotpot Cheat-Sheet</h2>
-      <p>The exact phrases that get you respect at a Chinese restaurant — ordering, spice levels, paying — on one page you can keep on your phone. No sign-up, just take it.</p>
-      <div class="cta-row">
-        <a class="btn btn-ink" href="assets/GuoTalk_Hotpot_Cheat-Sheet.pdf" download>⤓ Download the PDF — free</a>
-      </div>
+      <p>The exact phrases that get you respect at a Chinese restaurant — ordering, spice levels, paying — on one page you can keep on your phone. Drop your email and the download unlocks instantly.</p>
+      <form class="form" id="sheet-form" action="https://formspree.io/f/mvzewoag" method="POST">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
+        <input type="hidden" name="source" value="guotalk.app cheat-sheet download">
+        <button class="btn btn-ink" type="submit">⤓ Get the free PDF</button>
+      </form>
+      <div class="form-msg" id="sheet-msg"></div>
+      <p class="micro">We'll also send you one great China phrase each week. No spam, unsubscribe anytime.</p>
     </div>
     <div class="sheet-card">
       <div class="zh-big serif">你好，老板！</div>
@@ -209,6 +223,24 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 </footer>
 
 <script>
+// Cheat-sheet email gate
+const sform = document.getElementById('sheet-form');
+const smsg = document.getElementById('sheet-msg');
+sform.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  smsg.textContent = 'Unlocking…';
+  try {
+    const res = await fetch(sform.action, { method:'POST', body:new FormData(sform), headers:{Accept:'application/json'} });
+    if (res.ok) {
+      smsg.innerHTML = '你好! <a href="assets/GuoTalk_Hotpot_Cheat-Sheet.pdf" download>Your cheat-sheet is ready — tap here if the download didn\'t start.</a>';
+      const a = document.createElement('a');
+      a.href = 'assets/GuoTalk_Hotpot_Cheat-Sheet.pdf'; a.download = '';
+      document.body.appendChild(a); a.click(); a.remove();
+      sform.reset();
+    } else { smsg.textContent = 'Hmm, that didn\'t go through — try again or email guotalk2026@gmail.com.'; }
+  } catch { smsg.textContent = 'Network hiccup — try again or email guotalk2026@gmail.com.'; }
+});
+
 const form = document.getElementById('waitlist-form');
 const msg = document.getElementById('form-msg');
 form.addEventListener('submit', async (e) => {
