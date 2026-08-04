@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GuoTalk — Order hotpot like a local. Then everything else.</title>
-<meta name="description" content="Speak real Mandarin for travel and food — starting at the hotpot table. Learn to order, travel, and talk like a local with the GuoTalk app.">
+<meta name="description" content="Speak real Mandarin for travel and food — starting at the hotpot table. Free on the App Store and Google Play.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="apple-itunes-app" content="app-id=6783772136">
 <meta property="og:title" content="GuoTalk — Order hotpot like a local.">
-<meta property="og:description" content="Speak real Mandarin for travel and food — starting at the hotpot table.">
+<meta property="og:description" content="Speak real Mandarin for travel and food — starting at the hotpot table. Now on iPhone and Android.">
 <meta property="og:image" content="https://guotalk.app/assets/icon_192.png">
 <meta property="og:url" content="https://guotalk.app">
 <meta property="og:type" content="website">
@@ -15,7 +16,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"MobileApplication","name":"GuoTalk: Speak Mandarin","operatingSystem":"ANDROID","applicationCategory":"EducationApplication","description":"Speak real Mandarin for travel and food — starting at the hotpot table.","url":"https://guotalk.app","installUrl":"https://play.google.com/store/apps/details?id=com.guotalk.app","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{"@context":"https://schema.org","@graph":[
+{"@type":"MobileApplication","name":"GuoTalk: Speak Mandarin","operatingSystem":"IOS","applicationCategory":"EducationApplication","description":"Speak real Mandarin for travel and food — starting at the hotpot table.","url":"https://guotalk.app","installUrl":"https://apps.apple.com/app/id6783772136","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
+{"@type":"MobileApplication","name":"GuoTalk: Speak Mandarin","operatingSystem":"ANDROID","applicationCategory":"EducationApplication","description":"Speak real Mandarin for travel and food — starting at the hotpot table.","url":"https://guotalk.app","installUrl":"https://play.google.com/store/apps/details?id=com.guotalk.app","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+]}
 </script>
 <style>
 :root{
@@ -59,7 +63,7 @@ h1 em{color:var(--gold);font-style:italic}
 
 /* ---------- FEATURES ---------- */
 .features{background:var(--cream);color:var(--text-on-cream);padding:84px 0}
-.features h2, .sheet h2, .waitlist h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:700}
+.features h2, .sheet h2, .download h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:700}
 .features .lede{color:var(--muted-on-cream);margin-top:12px;max-width:44em;line-height:1.6}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:48px}
 .card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 10px 34px rgba(42,33,24,.10);border:1px solid rgba(42,33,24,.06)}
@@ -80,9 +84,11 @@ h1 em{color:var(--gold);font-style:italic}
 .sheet-card h3{margin-top:10px;font-weight:600}
 .sheet-card ul{margin:14px 0 0 18px;color:var(--muted-on-dark);font-size:.9rem;line-height:1.8}
 
-/* ---------- WAITLIST ---------- */
-.waitlist{background:radial-gradient(900px 500px at 50% 0%, #2c2113 0%, var(--ink) 70%);padding:84px 0;text-align:center}
-.waitlist p{color:var(--muted-on-dark);margin:14px auto 0;max-width:36em;line-height:1.6}
+/* ---------- DOWNLOAD ---------- */
+.download{background:radial-gradient(900px 500px at 50% 0%, #2c2113 0%, var(--ink) 70%);padding:84px 0;text-align:center}
+.download p{color:var(--muted-on-dark);margin:14px auto 0;max-width:36em;line-height:1.6}
+.store-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.store-note{margin-top:18px;font-size:.85rem;color:var(--muted-on-dark)}
 .form{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
 .form input{background:#221c15;border:1px solid rgba(242,195,103,.35);color:var(--text-on-dark);border-radius:14px;padding:15px 18px;font-size:1rem;width:min(340px,80vw);font-family:inherit;outline:none}
 .form input:focus{border-color:var(--gold)}
@@ -128,7 +134,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
       <div>
         <a class="navlink" href="/blog/">Guides</a>
         <a class="navlink" href="#cheatsheet">Free cheat-sheet</a>
-        <a class="navlink" href="#ios">iOS waitlist</a>
+        <a class="navlink" href="#download">Download</a>
       </div>
     </nav>
     <div class="hero-grid">
@@ -137,11 +143,13 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
         <h1 class="serif">Order hotpot like a local. <em>Then everything else.</em></h1>
         <p class="sub">Speak real Mandarin for travel and food — starting at the hotpot table. Real menus, real situations, 23+ cities of Chinese food. Stop pointing at menus.</p>
         <div class="cta-row">
+          <a class="btn btn-gold" href="https://apps.apple.com/app/id6783772136" rel="noopener">
+             <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store
+          </a>
           <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=com.guotalk.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dweb%26utm_campaign%3Dlanding" rel="noopener">
             ▶ Get it on Google Play
           </a>
-          <a class="btn btn-ghost" href="#ios"> iPhone? Join the waitlist</a>
-          <span class="ios-note">Free to try · iOS version in review</span>
+          <span class="ios-note">Free to try · iPhone &amp; Android</span>
         </div>
       </div>
       <div class="hero-shot"><img src="assets/shot_cover.webp" alt="GuoTalk app — Speak Mandarin, one bite at a time"></div>
@@ -194,17 +202,17 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
   </div>
 </section>
 
-<!-- IOS WAITLIST -->
-<section class="waitlist" id="ios">
+<!-- DOWNLOAD -->
+<section class="download" id="download">
+  <span id="ios"></span>
   <div class="wrap">
-    <h2 class="serif">On iPhone? The iOS app is almost here.</h2>
-    <p>It's in App Store review right now. Leave your email and you'll be the first to know the moment it's live — plus get one great China phrase each week. No spam, ever.</p>
-    <form class="form" id="waitlist-form" action="https://formspree.io/f/mvzewoag" method="POST">
-      <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
-      <input type="hidden" name="source" value="guotalk.app iOS waitlist">
-      <button class="btn btn-gold" type="submit">Join the waitlist</button>
-    </form>
-    <div class="form-msg" id="form-msg"></div>
+    <h2 class="serif">GuoTalk is live on iPhone and Android.</h2>
+    <p>Free to download, free to try. Grab it now and order your first hotpot in Mandarin tonight.</p>
+    <div class="store-row">
+      <a class="btn btn-gold" href="https://apps.apple.com/app/id6783772136" rel="noopener"> <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store</a>
+      <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=com.guotalk.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dweb%26utm_campaign%3Dfooter-cta" rel="noopener">▶ Get it on Google Play</a>
+    </div>
+    <p class="store-note">Requires iOS 15 or later. Free to download, with an optional GuoTalk Pro subscription.</p>
   </div>
 </section>
 
@@ -241,21 +249,6 @@ sform.addEventListener('submit', async (e) => {
   } catch { smsg.textContent = 'Network hiccup — try again or email guotalk2026@gmail.com.'; }
 });
 
-const form = document.getElementById('waitlist-form');
-const msg = document.getElementById('form-msg');
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (form.action.includes('REPLACE_FORM_ID')) {
-    msg.textContent = 'Waitlist opens shortly — meanwhile, email us at guotalk2026@gmail.com with "iOS" and we\'ll save your spot.';
-    return;
-  }
-  msg.textContent = 'Joining…';
-  try {
-    const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{Accept:'application/json'} });
-    if (res.ok) { msg.textContent = '你好! You\'re on the list. We\'ll email you the day iOS goes live. 🎉'; form.reset(); }
-    else { msg.textContent = 'Hmm, that didn\'t go through — try again or email guotalk2026@gmail.com.'; }
-  } catch { msg.textContent = 'Network hiccup — try again or email guotalk2026@gmail.com.'; }
-});
 </script>
 </body>
 </html>
