@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"MobileApplication","name":"GuoTalk: Speak Mandarin","operatingSystem":"IOS","applicationCategory":"EducationApplication","description":"Speak real Mandarin for travel and food — starting at the hotpot table.","url":"https://guotalk.app","installUrl":"https://apps.apple.com/app/id6783772136","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
@@ -33,200 +33,337 @@
 
 <style>
 :root{
-  --ink:#131010; --ink2:#1d1815;
-  --gold:#F2C367; --gold-deep:#C99A45;
-  --cream:#F6EFE3; --cream2:#EFE5D2;
-  --text-on-dark:#EFE7DA; --muted-on-dark:#B9AE9D;
-  --text-on-cream:#2A2118; --muted-on-cream:#6F6353;
-  --red:#B8452F;
+  --bg:#080505;
+  --bg2:#0F0A07;
+  --gold:#E8BE6E;
+  --gold-deep:#C79A48;
+  --red:#E4482B;
+  --bone:#F3EADA;
+  --muted:#9C8F7E;
+  --hairline:rgba(232,190,110,.14);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Poppins',system-ui,sans-serif;background:var(--ink);color:var(--text-on-dark);-webkit-font-smoothing:antialiased}
-.serif{font-family:'Playfair Display',Georgia,serif}
-.wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--bone);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+::selection{background:rgba(232,190,110,.3)}
+.serif{font-family:'Fraunces',Georgia,serif;font-weight:300;letter-spacing:-.015em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.zh{font-family:'Noto Serif SC',serif}
+
+/* film grain */
+.grain{position:fixed;inset:-100%;z-index:60;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-8%)}30%{transform:translate(4%,-4%)}50%{transform:translate(-6%,6%)}70%{transform:translate(6%,3%)}90%{transform:translate(-3%,7%)}}
+
+/* cursor glow (desktop) */
+#glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(closest-side,rgba(232,150,60,.07),transparent 70%);transform:translate(-50%,-50%);left:50%;top:30%;transition:opacity .4s}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s ease,border-color .35s ease,padding .35s ease;border-bottom:1px solid transparent;padding:20px 0}
+.nav.scrolled{background:rgba(8,5,5,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:var(--hairline);padding:12px 0}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand img{width:34px;height:34px;border-radius:9px;box-shadow:0 0 20px rgba(232,190,110,.35)}
+.brand span{font-weight:600;color:var(--bone);letter-spacing:.02em}
+.navlinks{display:flex;align-items:center;gap:28px}
+.navlink{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .15s}
+.navlink:hover{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;font-weight:600;border-radius:999px;padding:15px 30px;font-size:.97rem;cursor:pointer;border:0;font-family:inherit;line-height:1;position:relative;overflow:hidden;transition:transform .18s cubic-bezier(.2,.7,.3,1.4),box-shadow .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:linear-gradient(180deg,#F0CB80,#D2A150);color:#241605;box-shadow:0 8px 30px rgba(232,190,110,.22)}
+.btn-gold:hover{box-shadow:0 12px 44px rgba(232,190,110,.4)}
+.btn-gold::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .5s ease}
+.btn-gold:hover::after{left:130%}
+.btn-ghost{border:1px solid rgba(232,190,110,.4);color:var(--gold)}
+.btn-ghost:hover{background:rgba(232,190,110,.08);border-color:var(--gold)}
+.btn-sm{padding:11px 22px;font-size:.88rem}
 
 /* ---------- HERO ---------- */
-.hero{position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 50% -10%, #3a2a17 0%, #221a11 38%, var(--ink) 75%)}
-.hero::after{content:"锅";position:absolute;right:-4%;bottom:-14%;font-size:clamp(280px,44vw,560px);line-height:1;color:rgba(242,195,103,.045);font-weight:700;pointer-events:none;font-family:'Noto Sans SC','Poppins',sans-serif}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-.brand img{width:40px;height:40px;border-radius:10px;box-shadow:0 2px 14px rgba(242,195,103,.25)}
-.brand span{font-weight:800;letter-spacing:.4px;color:var(--gold);font-size:1.15rem}
-.nav a.navlink{color:var(--muted-on-dark);text-decoration:none;font-size:.9rem;font-weight:500;margin-left:22px}
-.nav a.navlink:hover{color:var(--gold)}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:56px 0 88px}
-.kicker{display:inline-block;color:var(--gold-deep);letter-spacing:.28em;font-size:.72rem;font-weight:600;text-transform:uppercase;margin-bottom:18px}
-h1{font-size:clamp(2.4rem,5.2vw,3.9rem);line-height:1.08;font-weight:700;color:#F7EEDD}
-h1 em{color:var(--gold);font-style:italic}
-.sub{margin-top:20px;color:var(--muted-on-dark);font-size:1.08rem;line-height:1.65;max-width:34em}
-.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;border-radius:14px;padding:15px 26px;font-size:1rem;transition:transform .15s ease, box-shadow .15s ease;border:0;cursor:pointer;font-family:inherit}
-.btn:active{transform:scale(.98)}
-.btn-gold{background:linear-gradient(180deg,#F7CE7B,#E0AC4F);color:#241a0b;box-shadow:0 6px 24px rgba(242,195,103,.28)}
-.btn-gold:hover{box-shadow:0 8px 30px rgba(242,195,103,.42)}
-.btn-ghost{border:1px solid rgba(242,195,103,.45);color:var(--gold)}
-.btn-ghost:hover{background:rgba(242,195,103,.08)}
-.ios-note{font-size:.8rem;color:var(--muted-on-dark);width:100%}
-.hero-shot{position:relative;justify-self:center}
-.hero-shot img{width:min(300px,72vw);border-radius:28px;border:1px solid rgba(242,195,103,.35);box-shadow:0 30px 70px rgba(0,0,0,.55), 0 0 0 6px rgba(242,195,103,.06);display:block}
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;text-align:center;overflow:hidden;padding:120px 0 80px}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-bg::before{content:"";position:absolute;inset:-30% -10% auto;height:110%;background:radial-gradient(800px 560px at 50% 12%,rgba(228,110,43,.20),rgba(150,60,25,.08) 45%,transparent 70%)}
+.ember{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(240,180,90,.85),rgba(228,110,43,.0) 70%);filter:blur(1px);animation:rise linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0) translateX(0) scale(1);opacity:0}8%{opacity:.7}60%{opacity:.35}100%{transform:translateY(-82vh) translateX(var(--drift,20px)) scale(.4);opacity:0}}
+.hanzi-float{position:absolute;font-family:'Noto Serif SC',serif;color:rgba(232,190,110,.06);user-select:none;pointer-events:none;will-change:transform}
+.hero-inner{position:relative;z-index:2}
+.kicker{display:inline-flex;align-items:center;gap:14px;color:var(--gold-deep);letter-spacing:.34em;font-size:.7rem;font-weight:600;text-transform:uppercase;margin-bottom:28px}
+.kicker::before,.kicker::after{content:"";width:46px;height:1px;background:var(--hairline)}
+h1{font-size:clamp(2.9rem,7.2vw,5.8rem);line-height:1.03;font-weight:300;color:#F8F0E0}
+h1 .line{display:block;overflow:hidden}
+h1 .line>span{display:inline-block;transform:translateY(110%);animation:lineup 1s cubic-bezier(.2,.65,.2,1) forwards}
+h1 .line:nth-child(2)>span{animation-delay:.14s}
+h1 em{font-style:italic;font-weight:300;color:var(--gold)}
+@keyframes lineup{to{transform:translateY(0)}}
+.sub{margin:28px auto 0;color:var(--muted);font-size:1.13rem;line-height:1.7;max-width:33em;opacity:0;animation:fadeup 1s ease .5s forwards}
+.cta-row{display:flex;gap:14px;margin-top:38px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeup 1s ease .7s forwards}
+.ios-note{width:100%;color:var(--muted);font-size:.84rem;letter-spacing:.03em}
+@keyframes fadeup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero-shot{margin:64px auto 0;position:relative;width:min(300px,72vw);opacity:0;animation:fadeup 1.1s ease .9s forwards}
+.hero-shot .halo{position:absolute;inset:auto -40% -14%;height:62%;background:radial-gradient(closest-side,rgba(232,150,60,.35),transparent 70%);filter:blur(14px);animation:halopulse 4s ease-in-out infinite}
+@keyframes halopulse{0%,100%{opacity:.7}50%{opacity:1}}
+.hero-shot img{position:relative;width:100%;border-radius:32px;border:1px solid rgba(232,190,110,.42);box-shadow:0 0 0 8px rgba(232,190,110,.05),0 60px 120px rgba(0,0,0,.75),0 0 100px rgba(232,150,60,.18);display:block;animation:bob 6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--muted);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;opacity:0;animation:fadeup 1s ease 1.4s forwards;z-index:2}
+.scroll-cue::after{content:"";display:block;width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);margin:10px auto 0;animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* ---------- FEATURES ---------- */
-.features{background:var(--cream);color:var(--text-on-cream);padding:84px 0}
-.features h2, .sheet h2, .download h2, .guides h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:700}
-.features .lede{color:var(--muted-on-cream);margin-top:12px;max-width:44em;line-height:1.6}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:48px}
-.card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 10px 34px rgba(42,33,24,.10);border:1px solid rgba(42,33,24,.06)}
-.card img{width:100%;display:block}
-.card .pad{padding:20px 22px 24px}
-.card h3{font-size:1.06rem;font-weight:600;margin-bottom:6px}
-.card h3 .zh{color:var(--red);margin-right:8px;font-weight:600}
-.card p{font-size:.9rem;color:var(--muted-on-cream);line-height:1.55}
+/* ---------- MARQUEE ---------- */
+.marquee{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);overflow:hidden;padding:20px 0;background:rgba(232,190,110,.02);position:relative;z-index:2}
+.marquee-track{display:flex;width:max-content;animation:marquee 36s linear infinite;gap:0}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.mq{display:inline-flex;align-items:center;gap:34px;padding-right:34px;white-space:nowrap;color:var(--muted);font-size:.96rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.mq .zh{color:var(--gold);font-size:1.25rem;letter-spacing:0}
+.mq .dot{width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- reveal-on-scroll ---------- */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.65,.2,1),transform .9s cubic-bezier(.2,.65,.2,1)}
+.rv.on{opacity:1;transform:none}
+.rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.22s}.rv-d3{transition-delay:.34s}
+
+/* ---------- SCROLLYTELLING TOUR ---------- */
+.tour{position:relative;z-index:2}
+.tour-head{padding:130px 0 0;text-align:center}
+.sec-kicker{display:block;color:var(--gold-deep);letter-spacing:.32em;font-size:.68rem;font-weight:600;text-transform:uppercase;margin-bottom:18px}
+h2{font-size:clamp(2.1rem,4.6vw,3.4rem);font-weight:300;line-height:1.1;color:#F6EDDC}
+h2 em{font-style:italic;color:var(--gold)}
+.lede{color:var(--muted);margin:18px auto 0;max-width:38em;line-height:1.7;font-size:1.05rem}
+.tour-body{height:340vh;position:relative;margin-top:20px}
+.tour-sticky{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;overflow:hidden}
+.tour-phone{position:relative;justify-self:end;width:min(300px,36vw)}
+.tour-phone::before{content:"";position:absolute;inset:8% -22%;background:radial-gradient(closest-side,rgba(232,150,60,.22),transparent 70%);filter:blur(8px)}
+.tour-phone .frame{position:relative}
+.tour-phone img{position:absolute;inset:0;width:100%;border-radius:30px;border:1px solid rgba(232,190,110,.35);box-shadow:0 44px 100px rgba(0,0,0,.7);opacity:0;transform:scale(.94) rotate(1.5deg);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.65,.2,1);display:block}
+.tour-phone img.active{opacity:1;transform:scale(1) rotate(0);position:relative}
+.tour-steps{max-width:430px}
+.tstep{padding:26px 0;border-left:1px solid var(--hairline);padding-left:30px;position:relative;opacity:.28;transition:opacity .4s ease}
+.tstep.active{opacity:1}
+.tstep::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .5s ease}
+.tstep.active::before{transform:scaleY(1)}
+.tstep .zh-big{font-family:'Noto Serif SC',serif;font-size:2rem;color:var(--gold);line-height:1;display:block;margin-bottom:12px}
+.step-img{display:none}
+.tstep h3{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:1.6rem;color:#F5ECDB}
+.tstep p{color:var(--muted);margin-top:10px;line-height:1.7;font-size:.98rem}
+
+/* ---------- STATS ---------- */
+.stats{padding:120px 0;position:relative;z-index:2}
+.stats .grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
+.stat{padding:46px 20px;text-align:center;border-left:1px solid var(--hairline)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:clamp(2.4rem,4.5vw,3.6rem);color:var(--gold)}
+.stat b span{display:inline;font-size:inherit;color:inherit;margin:0;letter-spacing:inherit}
+.stat > span{display:block;color:var(--muted);font-size:.88rem;margin-top:8px;letter-spacing:.04em}
 
 /* ---------- CHEAT SHEET ---------- */
-.sheet{background:var(--cream2);color:var(--text-on-cream);padding:76px 0}
-.sheet-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
-.sheet p{color:var(--muted-on-cream);margin-top:14px;line-height:1.65;max-width:36em}
-.btn-ink{background:var(--ink);color:var(--gold)}
-.btn-ink:hover{box-shadow:0 8px 26px rgba(19,16,16,.35)}
-.sheet-card{background:linear-gradient(160deg,#211a12,#131010);border-radius:20px;padding:34px;border:1px solid rgba(242,195,103,.3);color:var(--text-on-dark);box-shadow:0 16px 44px rgba(42,33,24,.25)}
-.sheet-card .zh-big{font-size:2.6rem;color:var(--gold)}
-.sheet-card h3{margin-top:10px;font-weight:600}
-.sheet-card ul{margin:14px 0 0 18px;color:var(--muted-on-dark);font-size:.9rem;line-height:1.8}
+.sheet{padding:0 0 130px;position:relative;z-index:2}
+.sheet-panel{border:1px solid rgba(232,190,110,.28);background:linear-gradient(160deg,#181009,#0B0705);border-radius:28px;padding:74px 68px;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;position:relative;overflow:hidden}
+.sheet-panel::after{content:"福";position:absolute;right:-40px;bottom:-80px;font-family:'Noto Serif SC',serif;font-size:300px;color:rgba(232,190,110,.045);line-height:1;pointer-events:none}
+.form{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.form input{background:rgba(243,234,218,.05);border:1px solid rgba(232,190,110,.35);color:var(--bone);border-radius:999px;padding:15px 24px;font-size:.98rem;width:min(310px,68vw);font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.form input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(232,190,110,.12)}
+.form input::placeholder{color:rgba(156,143,126,.7)}
+.form-msg{margin-top:14px;font-size:.92rem;color:var(--gold);min-height:1.4em}
+.form-msg a{color:var(--gold);font-weight:600}
+.micro{margin-top:12px;font-size:.78rem;color:var(--muted);max-width:32em}
+.sheet-card{border:1px solid rgba(232,190,110,.25);border-radius:20px;padding:38px;background:rgba(232,190,110,.04);position:relative;z-index:2;transition:transform .3s ease,box-shadow .3s ease;will-change:transform}
+.sheet-card:hover{box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.sheet-card .zh-big{font-family:'Noto Serif SC',serif;font-size:2.3rem;color:var(--gold);line-height:1.35}
+.sheet-card h3{margin-top:14px;font-weight:600;font-size:.98rem}
+.sheet-card ul{margin:14px 0 0 18px;color:var(--muted);font-size:.93rem;line-height:2}
 
 /* ---------- GUIDES ---------- */
-.guides{background:var(--ink2);padding:80px 0;border-top:1px solid rgba(242,195,103,.12)}
-.guides .lede{color:var(--muted-on-dark);margin-top:12px;max-width:44em;line-height:1.6}
-.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:38px}
-.guide{display:block;text-decoration:none;background:#191411;border:1px solid rgba(242,195,103,.16);border-radius:18px;padding:26px 26px 24px;transition:border-color .18s ease, transform .18s ease}
-.guide:hover{border-color:rgba(242,195,103,.45);transform:translateY(-2px)}
-.guide .gtag{display:inline-block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:600;margin-bottom:10px}
-.guide h3{color:#F3E9D8;font-size:1.12rem;font-weight:600;line-height:1.35}
-.guide p{color:var(--muted-on-dark);font-size:.9rem;line-height:1.6;margin-top:8px}
-.guides-more{margin-top:30px}
-.guides-more a{color:var(--gold);text-decoration:none;font-weight:600;font-size:.95rem}
-.guides-more a:hover{text-decoration:underline}
+.guides{padding:0 0 120px;position:relative;z-index:2}
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 64px;margin-top:48px;border-top:1px solid var(--hairline)}
+.guide{display:block;text-decoration:none;padding:32px 6px;border-bottom:1px solid var(--hairline);position:relative}
+.guide .gtag{display:inline-block;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);font-weight:600;margin-bottom:10px}
+.guide h3{color:#EFE5D2;font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:1.42rem;line-height:1.3;transition:color .2s;display:inline-block}
+.guide .arrow{display:inline-block;margin-left:10px;color:var(--gold);opacity:0;transform:translateX(-8px);transition:all .25s ease}
+.guide:hover h3{color:var(--gold)}
+.guide:hover .arrow{opacity:1;transform:translateX(0)}
+.guide p{color:var(--muted);font-size:.9rem;line-height:1.65;margin-top:8px;max-width:32em}
+.guides-more{margin-top:34px}
+.guides-more a{color:var(--gold);text-decoration:none;font-weight:600;font-size:.95rem;border-bottom:1px solid rgba(232,190,110,.4);padding-bottom:3px}
+.guides-more a:hover{border-color:var(--gold)}
 
 /* ---------- DOWNLOAD ---------- */
-.download{background:radial-gradient(900px 500px at 50% 0%, #2c2113 0%, var(--ink) 70%);padding:84px 0;text-align:center}
-.download p{color:var(--muted-on-dark);margin:14px auto 0;max-width:36em;line-height:1.6}
-.store-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-.store-note{margin-top:18px;font-size:.85rem;color:var(--muted-on-dark)}
-.form{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
-.form input{background:#221c15;border:1px solid rgba(242,195,103,.35);color:var(--text-on-dark);border-radius:14px;padding:15px 18px;font-size:1rem;width:min(340px,80vw);font-family:inherit;outline:none}
-.form input:focus{border-color:var(--gold)}
-.form-msg{margin-top:16px;font-size:.92rem;color:var(--gold);min-height:1.4em}
-.form-msg a{color:var(--gold);font-weight:600}
-
-/* ---------- SHEET GATE ---------- */
-.sheet .form{justify-content:flex-start;margin-top:24px}
-.sheet .form input{background:#fff;border:1px solid rgba(42,33,24,.25);color:var(--text-on-cream)}
-.sheet .form input:focus{border-color:var(--gold-deep)}
-.sheet .form-msg{color:var(--gold-deep);text-align:left}
-.sheet .form-msg a{color:var(--gold-deep)}
-.micro{margin-top:10px;font-size:.78rem;color:var(--muted-on-cream)}
+.download{padding:40px 0 140px;text-align:center;position:relative;z-index:2}
+.dl-inner{position:relative;border-top:1px solid var(--hairline);padding-top:110px}
+.dl-inner::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:920px;max-width:92vw;height:460px;background:radial-gradient(closest-side,rgba(232,150,60,.16),transparent 75%);pointer-events:none}
+.download h2{font-size:clamp(2.4rem,5.4vw,4.2rem)}
+.download p{color:var(--muted);margin:20px auto 0;max-width:32em;position:relative}
+.store-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:38px;position:relative}
+.store-note{margin-top:22px;font-size:.84rem;color:var(--muted);position:relative}
 
 /* ---------- FOOTER ---------- */
-footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
+footer{border-top:1px solid var(--hairline);padding:38px 0 48px;position:relative;z-index:2}
 .foot{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
-.socials a{color:var(--muted-on-dark);text-decoration:none;font-size:.9rem;margin-right:18px}
+.socials a{color:var(--muted);text-decoration:none;font-size:.9rem;margin-right:18px;transition:color .15s}
 .socials a:hover{color:var(--gold)}
-.legal{font-size:.78rem;color:#7d7466}
-.legal a{color:#9a8f7d;text-decoration:none}
+.legal{font-size:.78rem;color:#6E6455}
+.legal a{color:#8A7F6E;text-decoration:none}
 .legal a:hover{color:var(--gold)}
 
-@media (max-width:820px){
-  .hero-grid{grid-template-columns:1fr;text-align:center;padding:36px 0 64px}
-  .sub{margin-left:auto;margin-right:auto}
-  .cta-row{justify-content:center}
-  .hero-shot{order:-1;margin-bottom:8px}
-  .hero-shot img{width:min(230px,60vw)}
-  .cards{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .rv{opacity:1;transform:none}
+  h1 .line>span{transform:none}
+  .sub,.cta-row,.hero-shot,.scroll-cue{opacity:1}
+}
+@media (max-width:900px){
+  .navlinks .navlink{display:none}
+  .tour-body{height:auto;margin-top:40px}
+  .tour-sticky{position:static;height:auto;grid-template-columns:1fr;gap:0;padding-bottom:20px}
+  .tour-phone{display:none}
+  .tstep{opacity:1;padding:34px 0 34px 30px}
+  .tstep::before{transform:scaleY(1)}
+  .step-img{display:block;width:min(230px,62vw);border-radius:24px;border:1px solid rgba(232,190,110,.35);box-shadow:0 26px 60px rgba(0,0,0,.6);margin-top:22px}
+  .stats .grid{grid-template-columns:1fr}
+  .stat{border-left:0;border-top:1px solid var(--hairline)}
+  .stat:first-child{border-top:0}
+  .sheet-panel{grid-template-columns:1fr;padding:48px 28px}
   .guide-grid{grid-template-columns:1fr}
-  .sheet-grid{grid-template-columns:1fr}
-  .nav a.navlink{margin-left:14px}
 }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<header class="hero">
+<div class="grain" aria-hidden="true"></div>
+<div id="glow" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
   <div class="wrap">
-    <nav class="nav">
-      <a class="brand" href="/"><img src="assets/icon_192.png" alt="GuoTalk app icon"><span>GuoTalk</span></a>
-      <div>
-        <a class="navlink" href="/blog/">Guides</a>
-        <a class="navlink" href="#cheatsheet">Free cheat-sheet</a>
-        <a class="navlink" href="#download">Download</a>
-      </div>
-    </nav>
-    <div class="hero-grid">
-      <div>
-        <span class="kicker">Speak Mandarin · 锅话</span>
-        <h1 class="serif">Order hotpot like a local. <em>Then everything else.</em></h1>
-        <p class="sub">Speak real Mandarin for travel and food — starting at the hotpot table. Real menus, real situations, 23+ cities of Chinese food. Stop pointing at menus.</p>
-        <div class="cta-row">
-          <a class="btn btn-gold" href="/go/ios/?c=hero" rel="noopener">
-             <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store
-          </a>
-          <a class="btn btn-gold" href="/go/android/?c=hero" rel="noopener">
-            ▶ Get it on Google Play
-          </a>
-          <span class="ios-note">Free to try · iPhone &amp; Android</span>
-        </div>
-      </div>
-      <div class="hero-shot"><img src="assets/shot_cover.webp" alt="GuoTalk app — Speak Mandarin, one bite at a time"></div>
+    <a class="brand" href="/"><img src="assets/icon_192.png" alt="GuoTalk app icon"><span>GuoTalk</span></a>
+    <div class="navlinks">
+      <a class="navlink" href="/blog/">Guides</a>
+      <a class="navlink" href="#cheatsheet">Free cheat-sheet</a>
+      <a class="btn btn-gold btn-sm" href="#download">Download</a>
     </div>
   </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <span class="kicker">Speak Mandarin · 锅话</span>
+    <h1 class="serif">
+      <span class="line"><span>Order hotpot like a local.</span></span>
+      <span class="line"><span><em>Then everything else.</em></span></span>
+    </h1>
+    <p class="sub">Speak real Mandarin for travel and food — starting at the hotpot table. Real menus, real situations, 23+ cities of Chinese food. Stop pointing at menus.</p>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="/go/ios/?c=hero" rel="noopener">
+         <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> App Store
+      </a>
+      <a class="btn btn-ghost" href="/go/android/?c=hero" rel="noopener">▶&nbsp; Google Play</a>
+      <span class="ios-note">Free to try · iPhone &amp; Android</span>
+    </div>
+    <div class="hero-shot">
+      <div class="halo"></div>
+      <img src="assets/shot_cover.webp" alt="GuoTalk app — Speak Mandarin, one bite at a time">
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
 </header>
 
-<!-- FEATURES -->
-<section class="features">
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mqTrack">
+    <div class="mq">
+      <span class="zh">麻辣</span><span>málà</span><span class="dot"></span>
+      <span class="zh">你好老板</span><span>hello boss</span><span class="dot"></span>
+      <span class="zh">不要太辣</span><span>not too spicy</span><span class="dot"></span>
+      <span class="zh">我要一份</span><span>I'll have one</span><span class="dot"></span>
+      <span class="zh">结账</span><span>check, please</span><span class="dot"></span>
+      <span class="zh">好吃</span><span>delicious</span><span class="dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLLYTELLING TOUR -->
+<section class="tour">
+  <div class="wrap tour-head">
+    <span class="sec-kicker rv">Why GuoTalk</span>
+    <h2 class="serif rv rv-d1">Not another flashcard app.</h2>
+    <p class="lede rv rv-d2">GuoTalk starts where you actually are in China: hungry, curious, and staring at a menu you can't read. Scroll — this is how it works.</p>
+  </div>
+  <div class="tour-body" id="tourBody">
+    <div class="tour-sticky">
+      <div class="wrap" style="display:contents">
+        <div class="tour-phone">
+          <div class="frame" id="tourFrame">
+            <img src="assets/shot_order.webp" class="active" alt="Order food in Chinese with GuoTalk">
+            <img src="assets/shot_tone.webp" alt="Mandarin tone coach in GuoTalk">
+            <img src="assets/shot_map.webp" alt="Chinese food map across 23+ cities">
+          </div>
+        </div>
+        <div class="tour-steps" id="tourSteps">
+          <div class="tstep active">
+            <span class="zh-big">点菜</span>
+            <h3>Order like a local</h3>
+            <p>Real dishes, real menus, spice levels and all. Walk into a hotpot place and know exactly what to say — before the waiter reaches your table.</p>
+            <img class="step-img" src="assets/shot_order.webp" alt="" loading="lazy">
+          </div>
+          <div class="tstep">
+            <span class="zh-big">声调</span>
+            <h3>Get your tones right</h3>
+            <p>A tone coach that listens and corrects you — so 麻辣 comes out right and you order what you meant to.</p>
+            <img class="step-img" src="assets/shot_tone.webp" alt="" loading="lazy">
+          </div>
+          <div class="tstep">
+            <span class="zh-big">吃遍</span>
+            <h3>Eat across China</h3>
+            <p>A food map spanning 23+ cities — learn the language through the dishes each region is famous for.</p>
+            <img class="step-img" src="assets/shot_map.webp" alt="" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
   <div class="wrap">
-    <h2 class="serif">Not another flashcard app.</h2>
-    <p class="lede">GuoTalk starts where you actually are in China: hungry, curious, and staring at a menu you can't read. Learn the Mandarin that handles real situations — then build from there.</p>
-    <div class="cards">
-      <div class="card"><img src="assets/shot_order.webp" alt="Order food in Chinese with GuoTalk" loading="lazy">
-        <div class="pad"><h3><span class="zh">点菜</span>Order like a local</h3>
-        <p>Real dishes, real menus, spice levels and all. Walk into a hotpot place and know exactly what to say.</p></div></div>
-      <div class="card"><img src="assets/shot_tone.webp" alt="Mandarin tone coach in GuoTalk" loading="lazy">
-        <div class="pad"><h3><span class="zh">声调</span>Get your tones right</h3>
-        <p>A tone coach that listens and corrects you — so 麻辣 comes out right and you order what you meant to.</p></div></div>
-      <div class="card"><img src="assets/shot_map.webp" alt="Chinese food map across 23+ cities" loading="lazy">
-        <div class="pad"><h3><span class="zh">吃遍</span>Eat across China</h3>
-        <p>A food map spanning 23+ cities — learn the language through the dishes each region is famous for.</p></div></div>
+    <div class="grid rv">
+      <div class="stat"><b><span class="count" data-to="23">0</span>+</b><span>cities of regional Chinese food</span></div>
+      <div class="stat"><b><span class="count" data-to="120">0</span>+</b><span>real ingredients to master</span></div>
+      <div class="stat"><b><span class="count" data-to="600">0</span>+</b><span>native-speaker audio clips</span></div>
     </div>
   </div>
 </section>
 
 <!-- CHEAT SHEET -->
 <section class="sheet" id="cheatsheet">
-  <div class="wrap sheet-grid">
-    <div>
-      <h2 class="serif">Free: the Hotpot Cheat-Sheet</h2>
-      <p>The exact phrases that get you respect at a Chinese restaurant — ordering, spice levels, paying — on one page you can keep on your phone. Drop your email and the download unlocks instantly.</p>
-      <!-- Posts to MailerLite (account 2559589). Hidden iframe target keeps the
-           user on the page so we can send them to /thanks/ ourselves. -->
-      <iframe name="ml-sink" title="hidden" style="display:none;width:0;height:0;border:0"></iframe>
-      <form class="form" id="sheet-form" target="ml-sink" method="post"
-            action="https://assets.mailerlite.com/jsonp/2559589/forms/195043585136002977/subscribe">
-        <input type="email" name="fields[email]" placeholder="your@email.com" required aria-label="Email address">
-        <input type="hidden" name="ml-submit" value="1">
-        <input type="hidden" name="anticsrf" value="true">
-        <button class="btn btn-ink" type="submit">⤓ Get the free PDF</button>
-      </form>
-      <div class="form-msg" id="sheet-msg"></div>
-      <p class="micro">The PDF arrives instantly. We'll only email you when there's something genuinely useful — a new guide or a real app update. No spam, unsubscribe anytime.</p>
-    </div>
-    <div class="sheet-card">
-      <div class="zh-big serif">你好，老板！</div>
-      <h3>Inside the cheat-sheet</h3>
-      <ul>
-        <li>How to order spicy-level (so you don't cry)</li>
-        <li>The one phrase that earns instant respect</li>
-        <li>Pay, ask, and thank — like a regular</li>
-      </ul>
+  <div class="wrap">
+    <div class="sheet-panel rv">
+      <div>
+        <span class="sec-kicker">Free download</span>
+        <h2 class="serif">The Hotpot <em>Cheat-Sheet.</em></h2>
+        <p class="lede">The exact phrases that get you respect at a Chinese restaurant — ordering, spice levels, paying — on one page you can keep on your phone. Drop your email and the download unlocks instantly.</p>
+        <!-- Posts to MailerLite (account 2559589). Hidden iframe target keeps the
+             user on the page so we can send them to /thanks/ ourselves. -->
+        <iframe name="ml-sink" title="hidden" style="display:none;width:0;height:0;border:0"></iframe>
+        <form class="form" id="sheet-form" target="ml-sink" method="post"
+              action="https://assets.mailerlite.com/jsonp/2559589/forms/195043585136002977/subscribe">
+          <input type="email" name="fields[email]" placeholder="your@email.com" required aria-label="Email address">
+          <input type="hidden" name="ml-submit" value="1">
+          <input type="hidden" name="anticsrf" value="true">
+          <button class="btn btn-gold" type="submit">⤓ Get the free PDF</button>
+        </form>
+        <div class="form-msg" id="sheet-msg"></div>
+        <p class="micro">The PDF arrives instantly. We'll only email you when there's something genuinely useful — a new guide or a real app update. No spam, unsubscribe anytime.</p>
+      </div>
+      <div class="sheet-card" id="tiltCard">
+        <div class="zh-big">你好，老板！</div>
+        <h3>Inside the cheat-sheet</h3>
+        <ul>
+          <li>How to order spicy-level (so you don't cry)</li>
+          <li>The one phrase that earns instant respect</li>
+          <li>Pay, ask, and thank — like a regular</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -234,55 +371,56 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 <!-- GUIDES -->
 <section class="guides" id="guides">
   <div class="wrap">
-    <h2 class="serif">China survival guides</h2>
-    <p class="lede">The practical stuff nobody tells you before you land — paying, getting around, staying connected. Researched properly, updated with dates.</p>
+    <span class="sec-kicker rv">Before you land</span>
+    <h2 class="serif rv rv-d1">China survival guides</h2>
+    <p class="lede rv rv-d2" style="margin-left:0">The practical stuff nobody tells you before you land — paying, getting around, staying connected. Researched properly, updated with dates.</p>
     <div class="guide-grid">
-      <a class="guide" href="/blog/how-to-pay-in-china/">
+      <a class="guide rv" href="/blog/how-to-pay-in-china/">
         <span class="gtag">Money</span>
-        <h3>How to pay in China as a foreigner</h3>
+        <h3>How to pay in China as a foreigner</h3><span class="arrow">→</span>
         <p>Alipay and WeChat Pay with a foreign card — what actually works at the counter, and what to do when it doesn't.</p>
       </a>
-      <a class="guide" href="/blog/internet-in-china-esim-vpn/">
+      <a class="guide rv rv-d1" href="/blog/internet-in-china-esim-vpn/">
         <span class="gtag">Staying connected</span>
-        <h3>Getting online in China: eSIMs, VPNs and what works</h3>
+        <h3>Getting online in China: eSIMs, VPNs and what works</h3><span class="arrow">→</span>
         <p>A roaming eSIM, a local SIM and a VPN solve three different problems. Buy the wrong one and you land offline.</p>
       </a>
-      <a class="guide" href="/blog/chinese-restaurant-etiquette/">
+      <a class="guide rv" href="/blog/chinese-restaurant-etiquette/">
         <span class="gtag">At the table</span>
-        <h3>Chinese restaurant etiquette: real vs myth</h3>
+        <h3>Chinese restaurant etiquette: real vs myth</h3><span class="arrow">→</span>
         <p>Leaving food isn't polite any more. Slurping is a Japanese rule. What actually holds at a Chinese table in 2026.</p>
       </a>
-      <a class="guide" href="/blog/order-food-delivery-in-china/">
+      <a class="guide rv rv-d1" href="/blog/order-food-delivery-in-china/">
         <span class="gtag">Food</span>
-        <h3>Ordering food delivery without Chinese</h3>
+        <h3>Ordering food delivery without Chinese</h3><span class="arrow">→</span>
         <p>Ele.me is now Taobao Shangou. Meituan takes foreign cards. The address trap that breaks most first attempts.</p>
       </a>
-      <a class="guide" href="/blog/china-train-tickets-foreigner/">
+      <a class="guide rv" href="/blog/china-train-tickets-foreigner/">
         <span class="gtag">Transport</span>
-        <h3>Booking high-speed train tickets as a foreigner</h3>
+        <h3>Booking high-speed train tickets as a foreigner</h3><span class="arrow">→</span>
         <p>Verify your passport on 12306 weeks early — you can't buy a thing until it clears. Plus the gate cut-off nobody mentions.</p>
       </a>
-      <a class="guide" href="/blog/didi-in-china-without-chinese-number/">
+      <a class="guide rv rv-d1" href="/blog/didi-in-china-without-chinese-number/">
         <span class="gtag">Getting around</span>
-        <h3>Using Didi without a Chinese phone number</h3>
+        <h3>Using Didi without a Chinese phone number</h3><span class="arrow">→</span>
         <p>Ordering rides when you don't have a local SIM — the setup that works, and the traps that waste your first day.</p>
       </a>
     </div>
-    <p class="guides-more"><a href="/blog/">Read all guides →</a></p>
+    <p class="guides-more rv"><a href="/blog/">Read all guides →</a></p>
   </div>
 </section>
 
 <!-- DOWNLOAD -->
 <section class="download" id="download">
   <span id="ios"></span>
-  <div class="wrap">
-    <h2 class="serif">GuoTalk is live on iPhone and Android.</h2>
-    <p>Free to download, free to try. Grab it now and order your first hotpot in Mandarin tonight.</p>
-    <div class="store-row">
-      <a class="btn btn-gold" href="/go/ios/?c=footer" rel="noopener"> <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store</a>
-      <a class="btn btn-gold" href="/go/android/?c=footer" rel="noopener">▶ Get it on Google Play</a>
+  <div class="wrap dl-inner">
+    <h2 class="serif rv">Your first hotpot in Mandarin — <em>tonight.</em></h2>
+    <p class="rv rv-d1">Free to download, free to try. Live on iPhone and Android.</p>
+    <div class="store-row rv rv-d2">
+      <a class="btn btn-gold" href="/go/ios/?c=footer" rel="noopener"> <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store</a>
+      <a class="btn btn-ghost" href="/go/android/?c=footer" rel="noopener">▶&nbsp; Get it on Google Play</a>
     </div>
-    <p class="store-note">Requires iOS 15 or later. Free to download, with an optional GuoTalk Pro subscription.</p>
+    <p class="store-note rv rv-d3">Requires iOS 15 or later. Free to download, with an optional GuoTalk Pro subscription.</p>
   </div>
 </section>
 
@@ -302,18 +440,133 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 </footer>
 
 <script>
-// Cheat-sheet email gate.
-// The form POSTs natively into a hidden iframe (no CORS trouble), then we send
-// the visitor to /thanks/ ourselves. That pageview IS the signup metric.
-const sform = document.getElementById('sheet-form');
-const smsg = document.getElementById('sheet-msg');
-let sent = false;
-sform.addEventListener('submit', () => {
-  if (sent) return;
-  sent = true;
-  smsg.textContent = 'Unlocking…';
-  setTimeout(() => { window.location.href = '/thanks/'; }, 1200);
-});
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- nav blur on scroll ---- */
+  const nav = document.getElementById('nav');
+  const onScrollNav = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', onScrollNav, {passive:true}); onScrollNav();
+
+  /* ---- marquee: duplicate track for seamless loop ---- */
+  const track = document.getElementById('mqTrack');
+  track.innerHTML += track.innerHTML;
+
+  /* ---- floating hanzi + embers in hero ---- */
+  const heroBg = document.getElementById('heroBg');
+  const chars = ['锅','麻','辣','火','香','吃','味'];
+  const floats = [];
+  chars.forEach((c,i) => {
+    const el = document.createElement('span');
+    el.className = 'hanzi-float';
+    el.textContent = c;
+    const size = 60 + Math.round(90 * ((i*37)%100)/100);
+    el.style.fontSize = size + 'px';
+    el.style.left = (4 + (i*13.7)%88) + '%';
+    el.style.top = (6 + (i*29)%74) + '%';
+    heroBg.appendChild(el);
+    floats.push({el, f: .05 + ((i*17)%10)/40});
+  });
+  if(!reduced){
+    for(let i=0;i<14;i++){
+      const e = document.createElement('span');
+      e.className = 'ember';
+      const s = 3 + (i*7)%6;
+      e.style.width = e.style.height = s + 'px';
+      e.style.left = (8 + (i*631)%84) + '%';
+      e.style.bottom = '-2%';
+      e.style.setProperty('--drift', (((i*13)%60)-30) + 'px');
+      e.style.animationDuration = (7 + (i*97)%8) + 's';
+      e.style.animationDelay = (i*.9) + 's';
+      heroBg.appendChild(e);
+    }
+    /* hanzi parallax */
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > window.innerHeight * 1.4) return;
+      floats.forEach(o => { o.el.style.transform = 'translateY(' + (-y*o.f) + 'px)'; });
+    }, {passive:true});
+  }
+
+  /* ---- cursor glow (fine pointers only) ---- */
+  const glow = document.getElementById('glow');
+  if (window.matchMedia('(pointer:fine)').matches && !reduced){
+    window.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    }, {passive:true});
+  } else { glow.style.display = 'none'; }
+
+  /* ---- reveal on scroll ---- */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if(en.isIntersecting){ en.target.classList.add('on'); io.unobserve(en.target); } });
+  }, {threshold:.15, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+  /* ---- scrollytelling tour ---- */
+  const body = document.getElementById('tourBody');
+  const imgs = Array.from(document.querySelectorAll('#tourFrame img'));
+  const steps = Array.from(document.querySelectorAll('#tourSteps .tstep'));
+  let current = 0;
+  function setStep(i){
+    if(i===current) return; current = i;
+    imgs.forEach((im,k)=>im.classList.toggle('active',k===i));
+    steps.forEach((st,k)=>st.classList.toggle('active',k===i));
+  }
+  function onTourScroll(){
+    const r = body.getBoundingClientRect();
+    const total = r.height - window.innerHeight;
+    if (total <= 0) return;
+    const p = Math.min(1, Math.max(0, -r.top / total));
+    setStep(Math.min(2, Math.floor(p * 3)));
+  }
+  if (window.matchMedia('(min-width:901px)').matches){
+    window.addEventListener('scroll', onTourScroll, {passive:true}); onTourScroll();
+  } else {
+    imgs.forEach(im=>im.classList.add('active'));
+  }
+
+  /* ---- count-up stats ---- */
+  const counts = document.querySelectorAll('.count');
+  const cio = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(!en.isIntersecting) return;
+      cio.unobserve(en.target);
+      const to = +en.target.dataset.to, t0 = performance.now(), dur = 1400;
+      (function tick(t){
+        const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
+        en.target.textContent = Math.round(to*e);
+        if(p<1) requestAnimationFrame(tick);
+      })(t0);
+    });
+  }, {threshold:.5});
+  counts.forEach(c => cio.observe(c));
+
+  /* ---- tilt card ---- */
+  const card = document.getElementById('tiltCard');
+  if (card && window.matchMedia('(pointer:fine)').matches && !reduced){
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top)/r.height - .5) * -8;
+      const ry = ((e.clientX - r.left)/r.width - .5) * 10;
+      card.style.transform = 'perspective(700px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  }
+
+  /* ---- cheat-sheet email gate (unchanged behaviour) ----
+     The form POSTs natively into a hidden iframe (no CORS trouble), then we send
+     the visitor to /thanks/ ourselves. That pageview IS the signup metric. */
+  const sform = document.getElementById('sheet-form');
+  const smsg = document.getElementById('sheet-msg');
+  let sent = false;
+  sform.addEventListener('submit', () => {
+    if (sent) return;
+    sent = true;
+    smsg.textContent = 'Unlocking…';
+    setTimeout(() => { window.location.href = '/thanks/'; }, 1200);
+  });
+})();
 </script>
 </body>
 </html>
