@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Opening Google Play… · GuoTalk</title>
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<!-- ANALYTICS: this pageview = one website -> Google Play click. -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "0028bdb33ad141419b26e46766d84158"}'></script>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(900px 500px at 50% 0%,#2c2113 0%,#131010 70%);
+  color:#EFE7DA;font-family:'Poppins',system-ui,-apple-system,sans-serif;text-align:center;padding:24px}
+.box{max-width:420px}
+.zh{font-size:2.4rem;color:#F2C367;margin-bottom:14px}
+h1{font-size:1.15rem;font-weight:600;margin:0 0 10px}
+p{color:#B9AE9D;font-size:.92rem;line-height:1.6;margin:0}
+a{color:#F2C367;font-weight:600}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="zh">锅</div>
+  <h1>Opening Google Play…</h1>
+  <p>If nothing happens, <a id="go" href="https://play.google.com/store/apps/details?id=com.guotalk.app">tap here to open GuoTalk on Google Play</a>.</p>
+</div>
+<script>
+// Play install referrer -> shows up in Firebase Analytics first_open campaign attribution.
+(function(){
+  var c = new URLSearchParams(location.search).get('c') || 'site';
+  var referrer = 'utm_source=website&utm_medium=web&utm_campaign=' + c;
+  var url = 'https://play.google.com/store/apps/details?id=com.guotalk.app&referrer='
+          + encodeURIComponent(referrer);
+  document.getElementById('go').href = url;
+  // Small delay so the analytics beacon fires before we navigate away.
+  setTimeout(function(){ location.replace(url); }, 700);
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0;url=https://play.google.com/store/apps/details?id=com.guotalk.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dweb%26utm_campaign%3Dsite"></noscript>
+</body>
+</html>

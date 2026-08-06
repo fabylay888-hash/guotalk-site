@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /go/
+Disallow: /thanks/
+Disallow: /assets/GuoTalk_Hotpot_Cheat-Sheet.pdf
 
 Sitemap: https://guotalk.app/sitemap.xml

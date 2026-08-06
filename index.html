@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GuoTalk — Order hotpot like a local. Then everything else.</title>
 <meta name="description" content="Speak real Mandarin for travel and food — starting at the hotpot table. Free on the App Store and Google Play.">
+<link rel="canonical" href="https://guotalk.app/">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <meta name="apple-itunes-app" content="app-id=6783772136">
 <meta property="og:title" content="GuoTalk — Order hotpot like a local.">
@@ -12,6 +13,7 @@
 <meta property="og:image" content="https://guotalk.app/assets/icon_192.png">
 <meta property="og:url" content="https://guotalk.app">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
@@ -21,6 +23,16 @@
 {"@type":"MobileApplication","name":"GuoTalk: Speak Mandarin","operatingSystem":"ANDROID","applicationCategory":"EducationApplication","description":"Speak real Mandarin for travel and food — starting at the hotpot table.","url":"https://guotalk.app","installUrl":"https://play.google.com/store/apps/details?id=com.guotalk.app","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 ]}
 </script>
+
+<!-- ============================================================
+     ANALYTICS — Cloudflare Web Analytics
+     Replace 0028bdb33ad141419b26e46766d84158 with the token from
+     Cloudflare dash -> Analytics & Logs -> Web Analytics -> Add a site.
+     Until it's replaced, this line does nothing (safe to ship).
+     ============================================================ -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "0028bdb33ad141419b26e46766d84158"}'></script>
+
 <style>
 :root{
   --ink:#131010; --ink2:#1d1815;
@@ -51,7 +63,7 @@ h1{font-size:clamp(2.4rem,5.2vw,3.9rem);line-height:1.08;font-weight:700;color:#
 h1 em{color:var(--gold);font-style:italic}
 .sub{margin-top:20px;color:var(--muted-on-dark);font-size:1.08rem;line-height:1.65;max-width:34em}
 .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;border-radius:14px;padding:15px 26px;font-size:1rem;transition:transform .15s ease, box-shadow .15s ease}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;border-radius:14px;padding:15px 26px;font-size:1rem;transition:transform .15s ease, box-shadow .15s ease;border:0;cursor:pointer;font-family:inherit}
 .btn:active{transform:scale(.98)}
 .btn-gold{background:linear-gradient(180deg,#F7CE7B,#E0AC4F);color:#241a0b;box-shadow:0 6px 24px rgba(242,195,103,.28)}
 .btn-gold:hover{box-shadow:0 8px 30px rgba(242,195,103,.42)}
@@ -63,7 +75,7 @@ h1 em{color:var(--gold);font-style:italic}
 
 /* ---------- FEATURES ---------- */
 .features{background:var(--cream);color:var(--text-on-cream);padding:84px 0}
-.features h2, .sheet h2, .download h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:700}
+.features h2, .sheet h2, .download h2, .guides h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:700}
 .features .lede{color:var(--muted-on-cream);margin-top:12px;max-width:44em;line-height:1.6}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:48px}
 .card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 10px 34px rgba(42,33,24,.10);border:1px solid rgba(42,33,24,.06)}
@@ -83,6 +95,19 @@ h1 em{color:var(--gold);font-style:italic}
 .sheet-card .zh-big{font-size:2.6rem;color:var(--gold)}
 .sheet-card h3{margin-top:10px;font-weight:600}
 .sheet-card ul{margin:14px 0 0 18px;color:var(--muted-on-dark);font-size:.9rem;line-height:1.8}
+
+/* ---------- GUIDES ---------- */
+.guides{background:var(--ink2);padding:80px 0;border-top:1px solid rgba(242,195,103,.12)}
+.guides .lede{color:var(--muted-on-dark);margin-top:12px;max-width:44em;line-height:1.6}
+.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:38px}
+.guide{display:block;text-decoration:none;background:#191411;border:1px solid rgba(242,195,103,.16);border-radius:18px;padding:26px 26px 24px;transition:border-color .18s ease, transform .18s ease}
+.guide:hover{border-color:rgba(242,195,103,.45);transform:translateY(-2px)}
+.guide .gtag{display:inline-block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:600;margin-bottom:10px}
+.guide h3{color:#F3E9D8;font-size:1.12rem;font-weight:600;line-height:1.35}
+.guide p{color:var(--muted-on-dark);font-size:.9rem;line-height:1.6;margin-top:8px}
+.guides-more{margin-top:30px}
+.guides-more a{color:var(--gold);text-decoration:none;font-weight:600;font-size:.95rem}
+.guides-more a:hover{text-decoration:underline}
 
 /* ---------- DOWNLOAD ---------- */
 .download{background:radial-gradient(900px 500px at 50% 0%, #2c2113 0%, var(--ink) 70%);padding:84px 0;text-align:center}
@@ -119,6 +144,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
   .hero-shot{order:-1;margin-bottom:8px}
   .hero-shot img{width:min(230px,60vw)}
   .cards{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .guide-grid{grid-template-columns:1fr}
   .sheet-grid{grid-template-columns:1fr}
   .nav a.navlink{margin-left:14px}
 }
@@ -130,7 +156,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 <header class="hero">
   <div class="wrap">
     <nav class="nav">
-      <a class="brand" href="#"><img src="assets/icon_192.png" alt="GuoTalk app icon"><span>GuoTalk</span></a>
+      <a class="brand" href="/"><img src="assets/icon_192.png" alt="GuoTalk app icon"><span>GuoTalk</span></a>
       <div>
         <a class="navlink" href="/blog/">Guides</a>
         <a class="navlink" href="#cheatsheet">Free cheat-sheet</a>
@@ -143,10 +169,10 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
         <h1 class="serif">Order hotpot like a local. <em>Then everything else.</em></h1>
         <p class="sub">Speak real Mandarin for travel and food — starting at the hotpot table. Real menus, real situations, 23+ cities of Chinese food. Stop pointing at menus.</p>
         <div class="cta-row">
-          <a class="btn btn-gold" href="https://apps.apple.com/app/id6783772136" rel="noopener">
+          <a class="btn btn-gold" href="/go/ios/?c=hero" rel="noopener">
              <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store
           </a>
-          <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=com.guotalk.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dweb%26utm_campaign%3Dlanding" rel="noopener">
+          <a class="btn btn-gold" href="/go/android/?c=hero" rel="noopener">
             ▶ Get it on Google Play
           </a>
           <span class="ios-note">Free to try · iPhone &amp; Android</span>
@@ -188,7 +214,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
         <button class="btn btn-ink" type="submit">⤓ Get the free PDF</button>
       </form>
       <div class="form-msg" id="sheet-msg"></div>
-      <p class="micro">We'll also send you one great China phrase each week. No spam, unsubscribe anytime.</p>
+      <p class="micro">The PDF arrives instantly. We'll only email you when there's something genuinely useful — a new guide or a real app update. No spam, unsubscribe anytime.</p>
     </div>
     <div class="sheet-card">
       <div class="zh-big serif">你好，老板！</div>
@@ -202,6 +228,47 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
   </div>
 </section>
 
+<!-- GUIDES -->
+<section class="guides" id="guides">
+  <div class="wrap">
+    <h2 class="serif">China survival guides</h2>
+    <p class="lede">The practical stuff nobody tells you before you land — paying, getting around, staying connected. Researched properly, updated with dates.</p>
+    <div class="guide-grid">
+      <a class="guide" href="/blog/how-to-pay-in-china/">
+        <span class="gtag">Money</span>
+        <h3>How to pay in China as a foreigner</h3>
+        <p>Alipay and WeChat Pay with a foreign card — what actually works at the counter, and what to do when it doesn't.</p>
+      </a>
+      <a class="guide" href="/blog/internet-in-china-esim-vpn/">
+        <span class="gtag">Staying connected</span>
+        <h3>Getting online in China: eSIMs, VPNs and what works</h3>
+        <p>A roaming eSIM, a local SIM and a VPN solve three different problems. Buy the wrong one and you land offline.</p>
+      </a>
+      <a class="guide" href="/blog/chinese-restaurant-etiquette/">
+        <span class="gtag">At the table</span>
+        <h3>Chinese restaurant etiquette: real vs myth</h3>
+        <p>Leaving food isn't polite any more. Slurping is a Japanese rule. What actually holds at a Chinese table in 2026.</p>
+      </a>
+      <a class="guide" href="/blog/order-food-delivery-in-china/">
+        <span class="gtag">Food</span>
+        <h3>Ordering food delivery without Chinese</h3>
+        <p>Ele.me is now Taobao Shangou. Meituan takes foreign cards. The address trap that breaks most first attempts.</p>
+      </a>
+      <a class="guide" href="/blog/china-train-tickets-foreigner/">
+        <span class="gtag">Transport</span>
+        <h3>Booking high-speed train tickets as a foreigner</h3>
+        <p>Verify your passport on 12306 weeks early — you can't buy a thing until it clears. Plus the gate cut-off nobody mentions.</p>
+      </a>
+      <a class="guide" href="/blog/didi-in-china-without-chinese-number/">
+        <span class="gtag">Getting around</span>
+        <h3>Using Didi without a Chinese phone number</h3>
+        <p>Ordering rides when you don't have a local SIM — the setup that works, and the traps that waste your first day.</p>
+      </a>
+    </div>
+    <p class="guides-more"><a href="/blog/">Read all guides →</a></p>
+  </div>
+</section>
+
 <!-- DOWNLOAD -->
 <section class="download" id="download">
   <span id="ios"></span>
@@ -209,8 +276,8 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
     <h2 class="serif">GuoTalk is live on iPhone and Android.</h2>
     <p>Free to download, free to try. Grab it now and order your first hotpot in Mandarin tonight.</p>
     <div class="store-row">
-      <a class="btn btn-gold" href="https://apps.apple.com/app/id6783772136" rel="noopener"> <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store</a>
-      <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=com.guotalk.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dweb%26utm_campaign%3Dfooter-cta" rel="noopener">▶ Get it on Google Play</a>
+      <a class="btn btn-gold" href="/go/ios/?c=footer" rel="noopener"> <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true" style="flex:0 0 auto"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Download on the App Store</a>
+      <a class="btn btn-gold" href="/go/android/?c=footer" rel="noopener">▶ Get it on Google Play</a>
     </div>
     <p class="store-note">Requires iOS 15 or later. Free to download, with an optional GuoTalk Pro subscription.</p>
   </div>
@@ -221,6 +288,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
   <div class="wrap foot">
     <div class="socials">
       <a href="https://www.youtube.com/@GuoTalk" rel="noopener">YouTube</a>
+      <a href="https://www.threads.com/@guotalk" rel="noopener">Threads</a>
       <a href="https://www.instagram.com/guotalk" rel="noopener">Instagram</a>
       <a href="https://www.tiktok.com/@guotalk" rel="noopener">TikTok</a>
     </div>
@@ -231,7 +299,7 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 </footer>
 
 <script>
-// Cheat-sheet email gate
+// Cheat-sheet email gate -> /thanks/ (that pageview IS the signup metric)
 const sform = document.getElementById('sheet-form');
 const smsg = document.getElementById('sheet-msg');
 sform.addEventListener('submit', async (e) => {
@@ -240,15 +308,11 @@ sform.addEventListener('submit', async (e) => {
   try {
     const res = await fetch(sform.action, { method:'POST', body:new FormData(sform), headers:{Accept:'application/json'} });
     if (res.ok) {
-      smsg.innerHTML = '你好! <a href="assets/GuoTalk_Hotpot_Cheat-Sheet.pdf" download>Your cheat-sheet is ready — tap here if the download didn\'t start.</a>';
-      const a = document.createElement('a');
-      a.href = 'assets/GuoTalk_Hotpot_Cheat-Sheet.pdf'; a.download = '';
-      document.body.appendChild(a); a.click(); a.remove();
       sform.reset();
+      window.location.href = '/thanks/';
     } else { smsg.textContent = 'Hmm, that didn\'t go through — try again or email guotalk2026@gmail.com.'; }
   } catch { smsg.textContent = 'Network hiccup — try again or email guotalk2026@gmail.com.'; }
 });
-
 </script>
 </body>
 </html>
