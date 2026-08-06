@@ -206,9 +206,14 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
     <div>
       <h2 class="serif">Free: the Hotpot Cheat-Sheet</h2>
       <p>The exact phrases that get you respect at a Chinese restaurant — ordering, spice levels, paying — on one page you can keep on your phone. Drop your email and the download unlocks instantly.</p>
-      <form class="form" id="sheet-form" action="https://formspree.io/f/mvzewoag" method="POST">
-        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
-        <input type="hidden" name="source" value="guotalk.app cheat-sheet download">
+      <!-- Posts to MailerLite (account 2559589). Hidden iframe target keeps the
+           user on the page so we can send them to /thanks/ ourselves. -->
+      <iframe name="ml-sink" title="hidden" style="display:none;width:0;height:0;border:0"></iframe>
+      <form class="form" id="sheet-form" target="ml-sink" method="post"
+            action="https://assets.mailerlite.com/jsonp/2559589/forms/195043585136002977/subscribe">
+        <input type="email" name="fields[email]" placeholder="your@email.com" required aria-label="Email address">
+        <input type="hidden" name="ml-submit" value="1">
+        <input type="hidden" name="anticsrf" value="true">
         <button class="btn btn-ink" type="submit">⤓ Get the free PDF</button>
       </form>
       <div class="form-msg" id="sheet-msg"></div>
@@ -297,19 +302,17 @@ footer{border-top:1px solid rgba(242,195,103,.15);padding:40px 0 48px}
 </footer>
 
 <script>
-// Cheat-sheet email gate -> /thanks/ (that pageview IS the signup metric)
+// Cheat-sheet email gate.
+// The form POSTs natively into a hidden iframe (no CORS trouble), then we send
+// the visitor to /thanks/ ourselves. That pageview IS the signup metric.
 const sform = document.getElementById('sheet-form');
 const smsg = document.getElementById('sheet-msg');
-sform.addEventListener('submit', async (e) => {
-  e.preventDefault();
+let sent = false;
+sform.addEventListener('submit', () => {
+  if (sent) return;
+  sent = true;
   smsg.textContent = 'Unlocking…';
-  try {
-    const res = await fetch(sform.action, { method:'POST', body:new FormData(sform), headers:{Accept:'application/json'} });
-    if (res.ok) {
-      sform.reset();
-      window.location.href = '/thanks/';
-    } else { smsg.textContent = 'Hmm, that didn\'t go through — try again or email guotalk2026@gmail.com.'; }
-  } catch { smsg.textContent = 'Network hiccup — try again or email guotalk2026@gmail.com.'; }
+  setTimeout(() => { window.location.href = '/thanks/'; }, 1200);
 });
 </script>
 </body>
