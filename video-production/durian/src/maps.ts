@@ -88,6 +88,7 @@ export const MAPS: Record<string, MapSpec> = {
     notes: [{text: '?', x: 760, y: 560, delay: 20, size: 160}],
   },
   'thailand-only': {
+    tilt: true,
     from: SEA_CAM,
     highlight: {China: 'red', Thailand: 'gold'},
     labels: SEA_LABELS.slice(0, 2),
@@ -95,6 +96,7 @@ export const MAPS: Record<string, MapSpec> = {
     notes: [{text: '2021: almost 100%', x: 300, y: 820, delay: 40}],
   },
   'vietnam-opens': {
+    tilt: true,
     from: SEA_CAM,
     highlight: {China: 'red', Thailand: 'gold', Vietnam: 'gold'},
     labels: SEA_LABELS.slice(0, 3),
@@ -113,7 +115,8 @@ export const MAPS: Record<string, MapSpec> = {
     to: {c: [101.8, 19.8], z: 3000},
     highlight: {China: 'red', Thailand: 'gold', Laos: 'dim'},
     labels: [{at: [104.6, 25.6], text: 'China', size: 44}, {at: [103.2, 20.2], text: 'Laos', size: 34}, {at: [100.0, 15.6], text: 'Thailand', size: 34}],
-    routes: [{path: RAIL, delay: 10, dur: 120}],
+    routes: [{path: RAIL, delay: 10, dur: 120, mover: '🚆'}],
+    tilt: true,
     pins: [{at: [100.5, 13.75], label: 'Bangkok', delay: 6}, {at: [102.63, 17.97], label: 'Vientiane', delay: 60}, {at: [102.71, 25.04], label: 'Kunming', delay: 130}],
     notes: [{text: '26 hours', x: 1200, y: 640, delay: 140, size: 72}, {text: '→ 30+ cities in 48 h', x: 1180, y: 740, delay: 200}],
     title: 'CHINA–LAOS RAILWAY',
@@ -130,7 +133,8 @@ export const MAPS: Record<string, MapSpec> = {
     to: {c: [107, 16], z: 1650},
     highlight: {China: 'red', Thailand: 'gold'},
     labels: [{at: [104, 26], text: 'China', size: 50}, {at: [100.4, 16.6], text: 'Thailand', size: 32}],
-    routes: [{path: SEA_ROUTE, delay: 10, dur: 110, color: '#1B1410'}],
+    routes: [{path: SEA_ROUTE, delay: 10, dur: 110, color: '#1B1410', mover: '🚢'}],
+    tilt: true,
     pins: [{at: [100.88, 13.08], label: 'Laem Chabang', delay: 4}, {at: [113.6, 22.6], label: 'Southern China', delay: 120}],
     notes: [{text: '4 days by sea', x: 1300, y: 560, delay: 120, size: 64}],
   },
@@ -149,6 +153,7 @@ export const MAPS: Record<string, MapSpec> = {
     notes: [{text: '⚠ oversupply', x: 1150, y: 380, delay: 26, size: 72}],
   },
   hainan: {
+    tilt: true,
     from: {c: [108, 27], z: 1250},
     to: {c: [109.8, 19.3], z: 9500},
     highlight: {China: 'red'},

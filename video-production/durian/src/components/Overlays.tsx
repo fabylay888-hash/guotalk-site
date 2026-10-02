@@ -1,10 +1,11 @@
 import React from 'react';
-import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Easing, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import type {Overlay} from '../scenes';
 import {MAPS} from '../maps';
 import {C, CJK, HAND, MARKER, SANS, TYPE} from '../theme';
 import {MapScene} from './MapScene';
 import {Paper} from './Paper';
+import {Board, Clock, DepartureBoard, DocForm, IconGrid, PhoneFeed, PriceTag, Receipt, Split, StatOver} from './Devices';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const useIn = (delay = 0) => {
@@ -18,7 +19,7 @@ const useSweep = (delay: number, len = 14) => {
 };
 
 // Graphics that own the whole frame (drawn on paper) vs. ones laid over footage.
-export const FULL_FRAME = new Set<Overlay['type']>(['stat', 'bars', 'quote', 'note', 'timeline', 'price', 'route', 'map']);
+export const FULL_FRAME = new Set<Overlay['type']>(['stat', 'bars', 'quote', 'note', 'timeline', 'price', 'route', 'map', 'grid', 'receipt', 'tag', 'clock', 'depart', 'phone', 'board', 'doc', 'split', 'statover', 'seq']);
 
 // Yellow highlighter swiping across text, like a marked-up document.
 const Hi: React.FC<{children: React.ReactNode; delay: number}> = ({children, delay}) => {
@@ -277,6 +278,30 @@ export const OverlayView: React.FC<{o: Overlay; dur: number; onPaper: boolean}> 
     case 'stamp': return <Stamp {...o} />;
     case 'location': return <Location {...o} />;
     case 'map': return <MapScene spec={MAPS[o.map]} dur={dur} />;
+    case 'grid': return <IconGrid {...o} />;
+    case 'receipt': return <Receipt {...o} dur={dur} />;
+    case 'tag': return <PriceTag {...o} dur={dur} />;
+    case 'clock': return <Clock {...o} dur={dur} />;
+    case 'depart': return <DepartureBoard {...o} />;
+    case 'phone': return <PhoneFeed {...o} dur={dur} />;
+    case 'board': return <Board {...o} dur={dur} />;
+    case 'doc': return <DocForm {...o} />;
+    case 'split': return <Split {...o} dur={dur} />;
+    case 'statover': return <StatOver {...o} dur={dur} />;
+    case 'seq':
+      return (
+        <>
+          {o.parts.map((part, i) => {
+            const from = Math.round(o.at[i] * dur);
+            const to = i + 1 < o.parts.length ? Math.round(o.at[i + 1] * dur) : dur;
+            return (
+              <Sequence key={i} from={from} durationInFrames={Math.max(1, to - from)}>
+                <OverlayView o={part} dur={to - from} onPaper={onPaper} />
+              </Sequence>
+            );
+          })}
+        </>
+      );
     case 'scribbles': return <>{o.items.map((s, i) => <Scribble key={i} {...s} delay={s.delay ?? 20 + i * 18} />)}</>;
   }
 };

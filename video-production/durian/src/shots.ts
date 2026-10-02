@@ -86,6 +86,10 @@ export const SHOTS: Record<string, Shot> = {
   'hainan-orchard': {what: 'Tropical orchard on Hainan (or generic young orchard)', kind: 'stock', query: 'tropical orchard'},
   'lan-farm-dusk': {what: "Back to Lan's farm at dusk: durian on one side, coffee on the other", kind: 'stock', query: 'farm sunset trees'},
   'coffee-and-durian': {what: 'Coffee plants and durian trees side by side', kind: 'stock', query: 'coffee plantation'},
+  'border-trucks': {what: 'Queue of trucks at a border crossing or port gate', kind: 'stock', query: 'trucks queue border'},
+  'malaysia-durian': {what: 'Musang King durians (Malaysia)', kind: 'commons', query: 'durian', picks: [{label: 'Commons: Category Musang King', url: 'https://commons.wikimedia.org/wiki/Category:Musang_King'}]},
+  'rubber-plantation': {what: 'Rubber trees in rows, or latex tapping', kind: 'stock', query: 'rubber plantation'},
+  'price-board': {what: 'Hand-written price signs at a fruit stall', kind: 'stock', query: 'market price sign'},
   'socks-factory': {what: 'Sock knitting machines (next-video teaser)', kind: 'stock', query: 'textile factory', picks: [
     {label: 'Pexels: Machines in textile factory', url: 'https://www.pexels.com/video/machines-in-textile-factory-10628544/'}]},
 };

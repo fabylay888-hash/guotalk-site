@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Easing, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import timings from './timings.json';
 import {SCENES} from './scenes';
 import {Broll, pickBroll} from './components/Broll';
@@ -25,14 +25,32 @@ const Chapter: React.FC<{id: string; dur: number}> = ({id, dur}) => {
         const onPaper = !clip;
         return (
           <Sequence key={i} from={from} durationInFrames={len} name={`${id} ¶${i + 1}: ${clip ?? beat.overlay?.type ?? 'paper'}`}>
-            {clip ? <Broll id={clip} durationInFrames={len} seed={i + id.length} /> : full ? null : <Paper />}
-            {beat.overlay ? <OverlayView o={beat.overlay} dur={len} onPaper={onPaper} /> : null}
+            <BeatIn tr={beat.tr}>
+              {clip ? <Broll id={clip} durationInFrames={len} seed={i + id.length} /> : full ? null : <Paper />}
+              {beat.overlay ? <OverlayView o={beat.overlay} dur={len} onPaper={onPaper} /> : null}
+            </BeatIn>
             {beat.source ? <SourceTag text={beat.source} onPaper={onPaper} /> : null}
+            {beat.tr === 'burn' ? <FilmBurn /> : null}
           </Sequence>
         );
       })}
     </AbsoluteFill>
   );
+};
+
+// Whip pan: the new beat slides in fast with motion blur.
+const BeatIn: React.FC<{tr?: 'whip' | 'burn'; children: React.ReactNode}> = ({tr, children}) => {
+  const frame = useCurrentFrame();
+  if (tr !== 'whip') return <AbsoluteFill>{children}</AbsoluteFill>;
+  const t = interpolate(frame, [0, 8], [1, 0], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+  return <AbsoluteFill style={{transform: `translateX(${t * 70}%)`, filter: t > 0.01 ? `blur(${t * 24}px)` : undefined}}>{children}</AbsoluteFill>;
+};
+
+// Film burn: a warm light-leak flash for big reveals.
+const FilmBurn: React.FC = () => {
+  const frame = useCurrentFrame();
+  const o = interpolate(frame, [0, 3, 14], [0.95, 0.8, 0], {extrapolateRight: 'clamp'});
+  return <AbsoluteFill style={{pointerEvents: 'none', mixBlendMode: 'screen', opacity: o, background: 'radial-gradient(ellipse at 70% 30%, #fff6d8 0%, #ffb347 30%, #e2482b 60%, transparent 85%)'}} />;
 };
 
 const TitleCard: React.FC = () => {
@@ -60,8 +78,11 @@ const ChapterCard: React.FC<{num: number; title: string}> = ({num, title}) => {
   const {fps, durationInFrames} = useVideoConfig();
   const p = spring({frame, fps, config: {damping: 200}});
   const out = interpolate(frame, [durationInFrames - 8, durationInFrames], [1, 0], {extrapolateLeft: 'clamp'});
+  // Paper tear: the card rises in behind a jagged torn edge.
+  const rise = interpolate(frame, [0, 12], [100, -6], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+  const teeth = Array.from({length: 25}, (_, k) => `${k * 4.17}% ${rise + (k % 2 ? 3 : 0) + ((k * 37) % 5) * 0.6}%`).join(', ');
   return (
-    <AbsoluteFill style={{opacity: out}}>
+    <AbsoluteFill style={{opacity: out, clipPath: `polygon(${teeth}, 100% 100%, 0% 100%)`}}>
       <Paper>
         <AbsoluteFill style={{justifyContent: 'center', paddingLeft: 170}}>
           <div style={{fontFamily: TYPE, fontSize: 40, letterSpacing: 6, color: C.inkSoft, opacity: p}}>{num === 7 ? 'CLOSE' : `CHAPTER ${num}`}</div>

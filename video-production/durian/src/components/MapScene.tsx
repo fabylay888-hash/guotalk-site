@@ -14,12 +14,14 @@ export type MapSpec = {
   highlight?: Record<string, 'gold' | 'red' | 'dim'>;
   labels?: {at: LL; text: string; size?: number; delay?: number; color?: string}[];
   pins?: {at: LL; label?: string; delay?: number}[];
-  routes?: {path: LL[]; delay?: number; dur?: number; dashed?: boolean; color?: string}[];
+  routes?: {path: LL[]; delay?: number; dur?: number; dashed?: boolean; color?: string; mover?: string}[];
   arrows?: {from: LL; to: LL; delay?: number; color?: string; width?: number; bend?: number}[];
   notes?: {text: string; x: number; y: number; rotate?: number; delay?: number; size?: number}[];
   band?: {lat1: number; lat2: number; label: string};
   burst?: {origin: LL; cities: LL[]; delay: number};
   title?: string;
+  // Tilted 3D camera (perspective) instead of flat top-down paper map.
+  tilt?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,10 +52,13 @@ export const MapScene: React.FC<{spec: MapSpec; dur: number}> = ({spec, dur}) =>
     return C.land;
   };
 
+  const tiltT = spec.tilt ? interpolate(frame, [0, 40], [0, 1], {...clamp, easing: ease}) : 0;
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{background: C.sea, overflow: 'hidden'}}>
+      <AbsoluteFill style={{perspective: 1500, perspectiveOrigin: '50% 30%'}}>
+      <AbsoluteFill style={{transform: `rotateX(${50 * tiltT}deg) scale(${1 + 0.45 * tiltT}) translateY(${-60 * tiltT}px)`, transformOrigin: '50% 60%'}}>
       <AbsoluteFill style={{background: C.sea}} />
-      <svg width={1920} height={1080} style={{position: 'absolute'}}>
+      <svg width={1920} height={1080} style={{position: 'absolute', overflow: 'visible'}}>
         <defs>
           <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
             <line x1="0" y1="0" x2="0" y2="14" stroke={C.marker} strokeWidth="3" opacity="0.35" />
@@ -74,6 +79,7 @@ export const MapScene: React.FC<{spec: MapSpec; dur: number}> = ({spec, dur}) =>
               <path d={d} fill="none" stroke={C.ink} strokeOpacity={0.25} strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" strokeDashoffset={1 - prog} />
               <path d={d} fill="none" stroke={r.color ?? C.marker} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={r.dashed ? '0.012 0.008' : '1'} strokeDashoffset={r.dashed ? 0 : 1 - prog} style={r.dashed ? {clipPath: undefined} : undefined} opacity={r.dashed ? (prog > 0 ? 1 : 0) : 1} mask={r.dashed ? undefined : undefined} />
               {r.dashed ? <path d={d} fill="none" stroke={C.sea} strokeWidth={10} pathLength={1} strokeDasharray="1" strokeDashoffset={-prog} /> : null}
+              {r.mover && prog > 0 && prog < 1 ? <Mover pts={r.path.map(P)} prog={prog} icon={r.mover} tilt={!!spec.tilt} /> : null}
             </g>
           );
         })}
@@ -102,6 +108,9 @@ export const MapScene: React.FC<{spec: MapSpec; dur: number}> = ({spec, dur}) =>
           );
         })}
       </svg>
+      </AbsoluteFill>
+      </AbsoluteFill>
+      {/* Handwritten notes stay flat on screen, even when the map is tilted */}
       {(spec.notes ?? []).map((n, i) => {
         const s = appear(n.delay ?? 30);
         return (
@@ -171,6 +180,24 @@ const Burst: React.FC<{burst: NonNullable<MapSpec['burst']>; P: (l: LL) => [numb
           </g>
         );
       })}
+    </g>
+  );
+};
+
+// A vehicle riding the route: walks the projected polyline to the current progress.
+const Mover: React.FC<{pts: [number, number][]; prog: number; icon: string; tilt: boolean}> = ({pts, prog, icon, tilt}) => {
+  const seg = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+  const total = seg.reduce((a, b) => a + b, 0);
+  let d = prog * total;
+  let i = 0;
+  while (i < seg.length - 1 && d > seg[i]) d -= seg[i++];
+  const f = seg[i] ? d / seg[i] : 0;
+  const x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * f;
+  const y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * f;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <circle r={34} fill={C.paper} stroke={C.ink} strokeWidth={4} />
+      <text y={14} textAnchor="middle" fontSize={40} transform={tilt ? 'scale(1,1.6)' : undefined}>{icon}</text>
     </g>
   );
 };
