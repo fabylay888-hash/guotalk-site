@@ -79,7 +79,7 @@ export const MAPS: Record<string, MapSpec> = {
     highlight: {China: 'red'},
     labels: SEA_LABELS.slice(0, 1),
     band: {lat1: -10, lat2: 18, label: 'the tropics'},
-    notes: [{text: 'too cold, too windy', x: 1150, y: 180, delay: 40}],
+    notes: [{text: 'too cold, too windy', x: 1250, y: 560, delay: 40}],
   },
   'which-country': {
     from: SEA_CAM,
