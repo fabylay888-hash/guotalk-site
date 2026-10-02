@@ -4,13 +4,13 @@ China buys about 90% of all the durians the world exports, and a whole region ha
 
 ⏱ Chapters
 0:00 A farmer, a villa and one buyer
-1:10 The King of Fruits
-2:26 The Gold Rush
-4:06 The Durian Express
-5:27 The Yellow Scandal
-6:58 The Glut
-8:14 The Twist: China grows its own
-9:04 One buyer
+1:11 The King of Fruits
+2:36 The Gold Rush
+4:13 The Durian Express
+5:30 The Yellow Scandal
+6:51 The Glut
+8:08 The Twist: China grows its own
+8:53 One buyer
 
 📚 Sources
 Cold open & gold rush

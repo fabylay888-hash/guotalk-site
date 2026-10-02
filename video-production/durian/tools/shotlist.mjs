@@ -23,6 +23,9 @@ const ov = (o) => {
     case 'price': return `Price drop: ${o.to}`;
     case 'stamp': return `Stamp: ${o.text}`;
     case 'location': return `Location tag: ${o.text}`;
+    case 'note': return `Research note: "${o.text}"`;
+    case 'map': return `Animated map: ${o.map}`;
+    case 'scribbles': return `Marker notes: ${o.items.map((i) => i.text.replace(/\n/g, ' ')).join(', ')}`;
   }
 };
 const kindLabel = {stock: 'Stock (Pexels/Pixabay)', commons: 'Wikimedia Commons (credit author)', ai: 'AI-generated'};
@@ -41,8 +44,10 @@ T.forEach((ch, i) => {
   md += `| Time | Narration | Visual (B-roll) | Graphic | Citation |\n|---|---|---|---|---|\n`;
   ch.paras.forEach((p, j) => {
     const b = SCENES[ch.id][j];
-    const s = SHOTS[b.broll];
-    md += `| ${mmss(t + p.start)} | ${short(p.text).replace(/\|/g, '/')} | ${avail[b.broll] ? '✅ ' : ''}\`${b.broll}\`: ${s ? s.what : ''} | ${ov(b.overlay) || ''} | ${b.source || ''} |\n`;
+    const id = (b.broll || []).find((x) => !x.startsWith('ai-')) || (b.broll || [])[0];
+    const s = id ? SHOTS[id] : null;
+    const vis = id ? `${avail[id] ? '✅ ' : ''}\`${id}\`: ${s ? s.what : ''}` : '(graphic only)';
+    md += `| ${mmss(t + p.start)} | ${short(p.text).replace(/\|/g, '/')} | ${vis} | ${ov(b.overlay) || ''} | ${b.source || ''} |\n`;
   });
   t += f(ch.duration + 0.6);
   if (i === 0) { md += `\n**${mmss(t)} · Title card** (4.5 s): CHINA BUYS 90% OF THE WORLD'S DURIAN EXPORTS\n`; t += 4.5; }

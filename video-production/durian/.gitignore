@@ -2,3 +2,4 @@ node_modules/
 out/
 tools/.shotlist-bundle.mjs
 __pycache__/
+tools/.fetch-bundle.mjs

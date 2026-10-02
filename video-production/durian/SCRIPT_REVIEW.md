@@ -4,7 +4,7 @@
 
 The script is strong: it has a real character, one clear number and a rise-and-fall arc, and the fact-check has already removed the riskiest claims. Five things to fix before publishing:
 
-1. **The runtime is about 10 minutes, not 11–12.** The narration is 1,237 words, not ~1,700. The voiceover runs 9:28, and with title and chapter cards the video is 10:07. The chapter timestamps in the script are wrong, so use the ones below.
+1. **The runtime is about 10 minutes, not 11–12.** The narration is 1,237 words, not ~1,700. With the Jerry B. voiceover (9:21) plus title and chapter cards, the video is 10:00. The chapter timestamps in the script are wrong, so use the ones below.
 2. **Six claims in the narration have no source in your fact-check table.** These are the ones commenters will check.
 3. **There's little China in a China channel.** After Chapter 1, the story is told almost entirely from Southeast Asian farms.
 4. **Lan has no picture.** The cold open is built around a man we never see, and stock footage of "a farmer" would imply it's him.
@@ -17,15 +17,15 @@ The script is strong: it has a real character, one clear number and a rise-and-f
 | Time | Section |
 |---|---|
 | 0:00 | Cold open |
-| 1:05 | Title card |
-| 1:10 | 1. The King of Fruits |
-| 2:26 | 2. The Gold Rush |
-| 4:06 | 3. The Durian Express |
-| 5:27 | 4. The Yellow Scandal |
-| 6:58 | 5. The Glut |
-| 8:14 | 6. The Twist |
-| 9:04 | Close |
-| 9:55 | End screen (12 s) |
+| 1:07 | Title card |
+| 1:11 | 1. The King of Fruits |
+| 2:36 | 2. The Gold Rush |
+| 4:13 | 3. The Durian Express |
+| 5:30 | 4. The Yellow Scandal |
+| 6:51 | 5. The Glut |
+| 8:08 | 6. The Twist |
+| 8:53 | Close |
+| 9:48 | End screen (12 s) |
 
 **Options:**
 - **A. Ship at ~10 min (recommended).** It still clears the 8-minute mid-roll threshold, and tighter usually retains better.
@@ -68,7 +68,7 @@ GuoTalk is a China channel, but Chapters 2–5 are almost all Southeast Asian. S
 
 ## 6. AI voice and YouTube
 
-- The ElevenLabs narration (voice: "Cedric M – Engaging Documentary Narrator") is good enough to time the edit and review the cut.
+- The ElevenLabs narration now uses "Jerry B. – Authentic, Clear and Engaging" on the expressive v3 model, with delivery cues in `narration/v3/`.
 - **Recommendation: record the final narration yourself.** Your own voice is the channel's brand. AI narration on its own isn't against YouTube's rules, but the monetization policy on "inauthentic" (mass-produced or repetitive) content means AI-voiced channels get closer scrutiny. To swap your voice in, see README → "Replace the voiceover".
 - **AI images:** the 7 AI images are realistic and labelled "AI illustration" on screen. Also tick **"Altered or synthetic content"** in YouTube Studio when you upload.
 
