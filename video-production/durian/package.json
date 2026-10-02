@@ -1,0 +1,23 @@
+{
+  "name": "guotalk-durian-video",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "prepare-assets": "node tools/scan-broll.mjs && node tools/shotlist.mjs",
+    "studio": "npm run prepare-assets && remotion studio",
+    "render": "npm run prepare-assets && remotion render DurianVideo out/durian.mp4",
+    "render:draft": "npm run prepare-assets && remotion render DurianVideo out/durian-draft.mp4 --scale=0.5 --crf=28",
+    "align": "python3 tools/align.py",
+    "shotlist": "node tools/scan-broll.mjs && node tools/shotlist.mjs",
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.532",
+    "@remotion/media-utils": "^4.0.532",
+    "@types/react": "^18.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.532",
+    "typescript": "^7.0.2"
+  }
+}
