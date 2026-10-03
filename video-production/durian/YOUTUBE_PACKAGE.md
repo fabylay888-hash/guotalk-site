@@ -1,5 +1,23 @@
-# YouTube description (draft, ready to paste)
+# YouTube upload package
 
+Everything to paste into YouTube Studio. Thumbnails are in `thumbnails/`.
+
+## 1. Titles (A/B test)
+
+| # | Title | Pair with thumbnail | Angle |
+|---|---|---|---|
+| **T1 (recommended)** | China Buys 90% of the World's Durians. That's a Problem. | A ("CHINA BUYS 90%") | Big number + tension |
+| T2 | The $7.5 Billion Fruit That Depends on One Buyer | B ("$7.5B ON ONE FRUIT") | Money + curiosity |
+| T3 | Southeast Asia Bet Everything on One Customer | C ("ONE BUYER") | Human stakes |
+
+How to test:
+- In YouTube Studio, upload with **T1 + thumbnail A**, then open **Test & compare** and add thumbnails **B** and **C**. YouTube splits traffic and picks the winner by watch time (usually takes a few days to two weeks).
+- If your Studio also offers title testing, test T1 against T2 and T3 the same way. If not, keep T1 for the first week, then try T2 and compare click-through rate.
+- Don't change the title and thumbnail on the same day, or you won't know which change worked.
+
+## 2. Description (paste everything between the lines)
+
+---
 China buys about 90% of all the durians the world exports, and a whole region has replanted around that one buyer. Vietnamese coffee farmers got rich, Thai farmers ripped out rubber, and Malaysia's mangosteen became a luxury. Then came a dye scandal, a glut and a price crash. What happens when an entire export industry depends on one customer?
 
 ⏱ Chapters
@@ -57,14 +75,23 @@ Archival photos via Wikimedia Commons (cropped and colour graded):
 Licences: creativecommons.org/licenses/by-sa/4.0 · /by-sa/3.0 · /by/4.0
 
 #China #Durian #Vietnam #Thailand #Trade #GuoTalk
-
 ---
 
-## Before you paste: link checks
+## 3. Tags (paste into the Tags box, under 500 characters)
 
-I couldn't open these sites from my environment, so check these two. In each, the link's title (URL slug) doesn't obviously match the claim it supports in your script:
+durian, china durian, durian exports, durian price, vietnam durian, thailand durian, malaysia durian, musang king, durian boom, durian glut, china economy, china trade, southeast asia economy, vietnam coffee, china laos railway, hainan durian, auramine o, export dependence, one buyer, geopolitics explained, economics explained, guotalk
 
-1. **VietNamNet:** the slug is "durian prices plunge as domestic Chinese supply surges", but your script uses it for "Douyin's 30 million durian orders". Confirm the article contains that figure.
-2. **Produce Report "thai-durian-season-gap…":** your script uses it for "southern Thai farmers replace rubber with durian".
+## 4. Hashtags
+Already at the end of the description: #China #Durian #Vietnam #Thailand #Trade #GuoTalk (YouTube shows the first three above the title).
 
-Also add sources for the unsourced lines listed in `SCRIPT_REVIEW.md` §2.
+## 5. Pinned comment (post it yourself after publishing, then pin)
+
+> Would you still grow durian if you were Lan, or keep the coffee? 🤔 Next video: the Chinese town that makes a third of the world's socks.
+
+## 6. Studio settings checklist
+- **Altered or synthetic content:** Yes (AI voice, AI music, some AI-generated images).
+- **Category:** Education (or News & Politics).
+- **Made for kids:** No.
+- **Chapters:** automatic from the timestamps in the description (first one must be 0:00, which it is).
+- **End screen:** Editor → End screen → place a Video element and a Subscribe button over the two empty boxes in the last 12 seconds.
+- **Language / captions:** English. Upload `captions.srt` if provided, or let YouTube auto-caption and fix names (Pham Xuan Lan, Douyin, Hainan, Auramine O).
