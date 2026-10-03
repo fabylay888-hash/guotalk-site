@@ -1,28 +1,35 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
-import {MapScene, type MapSpec} from './components/MapScene';
+import {geoMercator, geoPath, type GeoPermissibleObjects} from 'd3-geo';
+import {feature} from 'topojson-client';
+import world from 'world-atlas/countries-50m.json';
 import {C, MARKER, SANS} from './theme';
 
 // YouTube thumbnails (rendered as stills at 1920x1080, exported at 1280x720).
 const stroke = (w: number, col = '#000') => ({WebkitTextStroke: `${w}px ${col}`, paintOrder: 'stroke fill' as const});
-const MAP: MapSpec = {
-  from: {c: [103, 22], z: 1250},
-  highlight: {China: 'red', Vietnam: 'gold', Thailand: 'gold', Malaysia: 'gold'},
-};
+// A: one idea. A giant red China on black, a huge durian sitting on it, 90% alone on the left.
+const countries = (feature(world as never, (world as never as {objects: {countries: never}}).objects.countries) as unknown as {features: {properties: {name: string}}[]}).features;
+const china = countries.filter((f) => f.properties.name === 'China' || f.properties.name === 'Taiwan');
+const sea = countries.filter((f) => ['Vietnam', 'Thailand', 'Malaysia', 'Laos', 'Cambodia', 'Myanmar'].includes(f.properties.name));
+const proj = geoMercator().fitExtent([[860, 40], [1900, 1000]], {type: 'FeatureCollection', features: china} as unknown as GeoPermissibleObjects);
+const path = geoPath(proj);
 
-// A: one idea only. China glowing red, one fat arrow from Southeast Asia, a huge 90%.
 const A: React.FC = () => (
-  <AbsoluteFill>
-    <MapScene spec={MAP} dur={60} />
-    <AbsoluteFill style={{background: 'radial-gradient(circle at 70% 35%, rgba(255,60,40,0.25) 0%, rgba(0,0,0,0) 45%)'}} />
+  <AbsoluteFill style={{background: 'radial-gradient(circle at 70% 45%, #2A1512 0%, #0B0606 70%)'}}>
     <svg width={1920} height={1080} style={{position: 'absolute'}}>
-      <path d="M 980 900 C 1000 700, 1120 560, 1300 470" fill="none" stroke="#fff" strokeWidth={70} strokeLinecap="round" />
-      <path d="M 980 900 C 1000 700, 1120 560, 1300 470" fill="none" stroke="#111" strokeWidth={46} strokeLinecap="round" />
-      <path d="M 1400 420 L 1240 410 L 1330 560 Z" fill="#111" stroke="#fff" strokeWidth={12} strokeLinejoin="round" />
+      <defs>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="28" /></filter>
+      </defs>
+      {sea.map((f, i) => <path key={i} d={path(f as unknown as GeoPermissibleObjects) ?? ''} fill="#3A2A1C" stroke="#5A4630" strokeWidth={3} />)}
+      {china.map((f, i) => <path key={'g' + i} d={path(f as unknown as GeoPermissibleObjects) ?? ''} fill="#FF2E24" filter="url(#glow)" opacity={0.65} />)}
+      {china.map((f, i) => <path key={i} d={path(f as unknown as GeoPermissibleObjects) ?? ''} fill="#E8261C" stroke="#FF8A7A" strokeWidth={5} />)}
     </svg>
-    <Img src={staticFile('thumb/durian-cut.png')} style={{position: 'absolute', left: 1310, top: 380, width: 560, filter: 'drop-shadow(18px 24px 0 rgba(0,0,0,0.4))'}} />
-    <div style={{position: 'absolute', left: 60, top: 60, fontFamily: SANS, fontWeight: 900, fontSize: 150, color: '#fff', letterSpacing: -4, ...stroke(18)}}>CHINA BUYS</div>
-    <div style={{position: 'absolute', left: 40, top: 200, fontFamily: SANS, fontWeight: 900, fontSize: 560, lineHeight: 1, color: '#FFD23F', letterSpacing: -26, ...stroke(26)}}>90%</div>
+    <Img src={staticFile('thumb/durian-cut.png')} style={{position: 'absolute', left: 1120, top: 210, width: 760, filter: 'drop-shadow(0 30px 40px rgba(0,0,0,0.6))'}} />
+    <div style={{position: 'absolute', left: 60, top: 150}}>
+      <div style={{fontFamily: SANS, fontWeight: 900, fontSize: 150, color: '#fff', letterSpacing: -4, ...stroke(16)}}>CHINA BUYS</div>
+      <div style={{fontFamily: SANS, fontWeight: 900, fontSize: 470, lineHeight: 0.92, color: '#FFD23F', letterSpacing: -22, ...stroke(24)}}>90%</div>
+      <div style={{fontFamily: SANS, fontWeight: 900, fontSize: 92, color: '#fff', letterSpacing: -2, marginTop: 10, ...stroke(12)}}>OF DURIAN EXPORTS</div>
+    </div>
   </AbsoluteFill>
 );
 
