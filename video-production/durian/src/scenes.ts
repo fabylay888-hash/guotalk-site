@@ -76,7 +76,7 @@ export const SCENES: Record<string, Beat[]> = {
     {broll: ['durian-closeup-spikes', 'ai-durian-closeup'], overlay: {type: 'scribbles', items: [{text: 'BIG', x: 220, y: 200, delay: 30}, {text: 'SPIKES', x: 1300, y: 260, delay: 60, rotate: 6}, {text: 'the SMELL...', x: 760, y: 800, delay: 100, rotate: -3}]}},
     {broll: DURIAN_OPEN},
     {source: 'Produce Report; China Customs via ECNS', overlay: {type: 'receipt', title: 'CHINA FRUIT IMPORTS 2025', lines: [['DURIAN (fresh)', '$7.49bn'], ['  1.87m tonnes', '2× 2022'], ['BANANAS', '$1.06bn']], total: ['NO.1 BY VALUE', 'DURIAN'], footer: 'illustrative · source: China Customs', bg: MARKET}},
-    {source: 'Douyin e-commerce report via VietNamNet', overlay: {type: 'phone', clips: ['durian-slowmo', 'durian-cut-open', 'durian-cut-open-2', 'ai-durian-open', 'ai-durian-closeup', 'ai-durian-market'], counter: {label: 'durian orders, one platform, one year', value: 30000000}, caption: 'billions of views'}},
+    {source: 'Douyin e-commerce report via VietNamNet', overlay: {type: 'phone', clips: ['phone-scroll', 'durian-slowmo', 'durian-cut-open', 'durian-cut-open-2', 'ai-durian-open', 'ai-durian-closeup', 'ai-durian-market'], counter: {label: 'durian orders, one platform, one year', value: 30000000}, caption: 'billions of views'}},
     {broll: ['durian-cut-open-2', ...DURIAN_OPEN], tr: 'whip', overlay: {type: 'callout', text: '榴莲自由', sub: '"durian freedom": buying one without checking the price'}},
     {overlay: {type: 'map', map: 'durian-belt'}},
     {source: 'Xinhua via The Star', overlay: {type: 'timeline', points: [{year: '1958', label: 'first planting attempt'}, {year: '2019', label: 'real breakthrough'}]}},

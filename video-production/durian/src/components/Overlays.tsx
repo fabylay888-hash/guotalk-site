@@ -42,9 +42,9 @@ const MarkerCircle: React.FC<{w: number; h: number; x: number; y: number; delay:
   );
 };
 
-const Scribble: React.FC<{text: string; x: number; y: number; delay: number; rotate?: number; size?: number}> = ({text, x, y, delay, rotate = -5, size = 54}) => {
+const Scribble: React.FC<{text: string; x: number; y: number; delay: number; rotate?: number; size?: number}> = ({text, x, y, delay, rotate = -5, size = 76}) => {
   const p = useIn(delay);
-  return <div style={{position: 'absolute', left: x, top: y, fontFamily: MARKER, fontSize: size, color: C.marker, transform: `rotate(${rotate}deg) scale(${0.85 + 0.15 * p})`, opacity: p, whiteSpace: 'pre', lineHeight: 1.05, textShadow: '0 2px 10px rgba(0,0,0,0.45)'}}>{text}</div>;
+  return <div style={{position: 'absolute', left: x, top: y, fontFamily: MARKER, fontSize: size, color: C.marker, transform: `rotate(${rotate}deg) scale(${0.85 + 0.15 * p})`, opacity: p, whiteSpace: 'pre', lineHeight: 1.05, WebkitTextStroke: '2px #fff', paintOrder: 'stroke fill', textShadow: '0 0 10px rgba(255,255,255,0.9), 0 0 22px rgba(255,255,255,0.6), 0 4px 14px rgba(0,0,0,0.35)'}}>{text}</div>;
 };
 
 // Counts up the first number in the string (keeps prefix/suffix and thousands separators).

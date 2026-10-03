@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import available from '../available.json';
 import {C, CJK, HAND, MARKER, SANS, TYPE} from '../theme';
 import {Broll, pickBroll} from './Broll';
@@ -226,6 +226,8 @@ export const PhoneFeed: React.FC<{clips: string[]; counter: {label: string; valu
   const frame = useCurrentFrame();
   const p = useIn(0);
   const have = clips.filter((c) => AVAIL[c]);
+  // A real vertical clip (e.g. someone scrolling a phone) plays in its own frame instead of the drawn phone.
+  const realVideo = have.find((c) => /\.(mp4|mov|webm)$/i.test(AVAIL[c]));
   const per = 34;
   const idx = Math.floor(frame / per);
   const within = (frame % per) / per;
@@ -244,6 +246,16 @@ export const PhoneFeed: React.FC<{clips: string[]; counter: {label: string; valu
   return (
     <AbsoluteFill>
       <Paper />
+      {realVideo ? (
+        <div style={{position: 'absolute', left: 280, top: 40, width: 560, height: 1000, borderRadius: 28, overflow: 'hidden', boxShadow: '0 40px 80px rgba(0,0,0,0.45)', transform: `translateY(${(1 - p) * 300}px) rotate(-2deg)`, border: `10px solid ${C.paper}`}}>
+          <OffthreadVideo src={staticFile(`broll/${AVAIL[realVideo]}`)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+          {Array.from({length: 8}).map((_, i) => {
+            const t0 = (i * 17) % 120;
+            const f = ((frame - t0) % 120) / 60;
+            return f > 0 && f < 1 ? <div key={i} style={{position: 'absolute', right: 40 + Math.sin(f * 6 + i) * 30, bottom: 120 + f * 520, fontSize: 52, color: '#ff4d6d', opacity: 1 - f}}>♥</div> : null;
+          })}
+        </div>
+      ) : (
       <div style={{position: 'absolute', left: 300, top: 40, width: W, height: H, borderRadius: 70, background: '#0b0b0b', padding: 18, boxShadow: '0 40px 80px rgba(0,0,0,0.45)', transform: `translateY(${(1 - p) * 300}px) rotate(-3deg)`}}>
         <div style={{position: 'relative', width: '100%', height: '100%', borderRadius: 54, overflow: 'hidden', background: '#000'}}>
           <div style={{position: 'absolute', inset: 0, transform: `translateY(${-slide * 100}%)`}}>{screen(live ? 0 : idx)}</div>
@@ -266,6 +278,7 @@ export const PhoneFeed: React.FC<{clips: string[]; counter: {label: string; valu
           })}
         </div>
       </div>
+      )}
       <div style={{position: 'absolute', left: 980, top: 300, maxWidth: 800}}>
         <div style={{fontFamily: TYPE, fontSize: 40, color: C.inkSoft}}>{counter.label}</div>
         <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 150, color: C.ink, letterSpacing: -5, fontVariantNumeric: 'tabular-nums'}}>{count.toLocaleString('en-US')}</div>
