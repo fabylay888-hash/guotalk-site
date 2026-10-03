@@ -128,8 +128,8 @@ export const SCENES: Record<string, Beat[]> = {
   ],
   '06-the-twist': [
     {overlay: {type: 'map', map: 'hainan'}},
-    {broll: ['hainan-orchard', 'hainan-island', ...ORCHARD], overlay: {type: 'callout', text: 'China is growing its own.'}},
-    {source: 'AFP via The Vibes', overlay: {type: 'map', map: 'hainan-close'}},
+    {broll: ['hainan-island', 'hainan-orchard', ...ORCHARD], overlay: {type: 'callout', text: 'China is growing its own.'}},
+    {source: 'AFP via The Vibes', overlay: {type: 'seq', at: [0, 0.45], parts: [{type: 'map', map: 'hainan-close'}, {type: 'statover', value: 'Tree-ripened', label: "Hainan's pitch vs imports picked early for the journey", ids: ['durian-closeup-spikes', 'ai-durian-closeup']}]}},
     {broll: ORCHARD, tr: 'whip', overlay: {type: 'callout', text: 'Should Southeast Asia panic?'}},
     {source: 'FreshPlaza; AFP via The Vibes', overlay: {type: 'grid', n: 1, target: '', hitColor: '#3F7A3A', label: 'Durian China eats: homegrown vs imported', sub: 'homegrown: < 1 in 100 (2025)'}},
     {overlay: {type: 'callout', text: "It's the math."}},
@@ -148,7 +148,7 @@ export const SCENES: Record<string, Beat[]> = {
       {key: 'th', x: 560, y: 70, rot: 2, img: ['thailand-durian-farm', 'ai-durian-market'], title: 'Thailand', text: 'dye scandal → own labs', at: 16},
       {key: 'vn', x: 1160, y: 80, rot: -2, img: ['vietnam-orchard-aerial', 'ai-durian-orchard'], title: 'Vietnam', text: 'gold rush → oversupply', at: 22},
       {key: 'my', x: 1480, y: 520, rot: 4, img: ['malaysia-durian', 'ai-durian-open'], title: 'Malaysia', text: 'prices down by half', at: 28},
-      {key: 'hn', x: 1100, y: 700, rot: -3, img: ['hainan-island', 'hainan-orchard'], title: 'Hainan', text: '< 1% of supply', at: 34},
+      {key: 'hn', x: 1100, y: 700, rot: -3, img: ['hainan-orchard', 'hainan-island'], title: 'Hainan', text: '< 1% of supply', at: 34},
     ], strings: [['lan', 'china', 40], ['hung', 'china', 44], ['th', 'china', 48], ['vn', 'china', 52], ['my', 'china', 56], ['hn', 'china', 60]]}},
   ],
 };
