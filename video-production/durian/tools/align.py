@@ -14,6 +14,7 @@ EXTRA = {  # pronunciations missing from the CMU dictionary
 }
 root = pathlib.Path(__file__).resolve().parent.parent
 out = []
+words_out = {}
 for txt in sorted((root / 'narration').glob('*.txt')):
     mp3 = root / 'public/vo' / (txt.stem + '.mp3')
     pcm = subprocess.run(['ffmpeg', '-v', 'error', '-i', str(mp3), '-ar', '16000', '-ac', '1', '-f', 's16le', '-'], capture_output=True, check=True).stdout
@@ -33,6 +34,8 @@ for txt in sorted((root / 'narration').glob('*.txt')):
         i += len(ws)
     assert len(words) == sum(len(w) for w in pw), (txt.stem, len(words), sum(len(w) for w in pw))
     starts[0] = 0.0
+    words_out[txt.stem] = [[w, t] for w, t in words]
     out.append({'id': txt.stem, 'duration': round(dur, 2), 'paras': [{'start': s, 'text': p} for s, p in zip(starts, paras)]})
     print(txt.stem, starts)
 (root / 'src/timings.json').write_text(json.dumps(out, indent=1, ensure_ascii=False))
+(root / 'tools/words.json').write_text(json.dumps(words_out))
