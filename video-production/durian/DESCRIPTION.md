@@ -55,6 +55,7 @@ Archival photos via Wikimedia Commons (cropped and colour graded):
 • Durian Fruit in Yunnan: Rod Waddington, CC BY-SA 2.0
 • Durian Musang King: Rruunnaa, CC BY 4.0
 • Haitang Bay in Sanya: Charlie fong, CC BY-SA 4.0
+• Hữu Nghị Quan (Friendship Pass): Liftold at Vietnamese Wikipedia, CC BY-SA 3.0
 Licences: creativecommons.org/licenses/by-sa/4.0 · /by-sa/3.0 · /by-sa/2.0 · /by/4.0
 (Delete any line whose photo doesn't make the final cut.)
 

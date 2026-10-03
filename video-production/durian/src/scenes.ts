@@ -110,12 +110,12 @@ export const SCENES: Record<string, Beat[]> = {
     {broll: ['supermarket-durian', ...MARKET], tr: 'whip', overlay: {type: 'callout', text: 'Luxury fruit → everyday fruit'}},
   ],
   '04-yellow-scandal': [
-    {broll: ['ai-packing-line']},
-    {source: 'ITFNet; IARC', overlay: {type: 'doc', header: 'SUBSTANCE FILE', fields: [['substance', 'Auramine O'], ['made for', 'textiles & paper dye'], ['IARC (WHO)', 'possible carcinogen'], ['China', 'non-edible since 2008']]}},
-    {source: 'Produce Report, 12 Jan 2025', overlay: {type: 'doc', header: 'IMPORT INSPECTION · FRESH DURIAN', fields: [['from', '10 Jan 2025'], ['test 1', 'Auramine O'], ['test 2', 'cadmium'], ['result', 'batch turned away']], stamp: 'REJECTED'}},
+    {broll: ['china-market-durian', 'ai-packing-line'], overlay: {type: 'scribbles', items: [{text: 'make it look good', x: 1080, y: 170, delay: 50}]}},
+    {source: 'ITFNet; IARC', overlay: {type: 'seq', at: [0, 0.21], parts: [{type: 'statover', value: 'Turmeric', label: 'the traditional way to keep durians golden', ids: ['turmeric']}, {type: 'doc', header: 'SUBSTANCE FILE', fields: [['substance', 'Auramine O'], ['made for', 'textiles & paper dye'], ['IARC (WHO)', 'possible carcinogen'], ['China', 'non-edible since 2008']]}]}},
+    {source: 'Produce Report, 12 Jan 2025', overlay: {type: 'seq', at: [0, 0.39, 0.81], parts: [{type: 'statover', value: 'Dye found', label: 'Chinese inspectors, start of 2025: Auramine O in Thai durians', ids: ['lab-testing']}, {type: 'doc', header: 'IMPORT INSPECTION · FRESH DURIAN', fields: [['from', '10 Jan 2025'], ['test 1', 'Auramine O'], ['test 2', 'cadmium'], ['result', 'batch turned away']], stamp: 'REJECTED'}, {type: 'statover', value: 'Turned away', label: 'Friendship Pass, the China–Vietnam border crossing', ids: ['friendship-pass']}]}},
     {source: 'Vietnamese press via Antidumping.vn; Tuoi Tre', overlay: {type: 'statover', value: '~20%', label: "of plan: Vietnam's durian exports to China, Jan–Apr 2025", sub: '> $500m → ~$125m', ids: ['border-trucks', 'vietnam-port-trucks', 'ai-durian-market']}},
     {source: 'Produce Report', overlay: {type: 'map', map: 'thai-labs'}},
-    {broll: MARKET, overlay: {type: 'callout', text: 'Their standards become your standards.'}},
+    {broll: ['thailand-durian-farm', ...MARKET], overlay: {type: 'callout', text: 'Their standards become your standards.'}},
   ],
   '05-the-glut': [
     {broll: ['timelapse-growth', ...ORCHARD], tr: 'whip', overlay: {type: 'callout', text: '2026'}},
