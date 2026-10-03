@@ -4,13 +4,13 @@ China buys about 90% of all the durians the world exports, and a whole region ha
 
 ⏱ Chapters
 0:00 A farmer, a villa and one buyer
-1:11 The King of Fruits
-2:36 The Gold Rush
-4:13 The Durian Express
-5:30 The Yellow Scandal
-6:51 The Glut
-8:08 The Twist: China grows its own
-8:53 One buyer
+1:05 The King of Fruits
+2:18 The Gold Rush
+3:57 The Durian Express
+5:14 The Yellow Scandal
+6:41 The Glut
+7:55 The Twist: China grows its own
+8:41 One buyer
 
 📚 Sources
 Cold open & gold rush
@@ -48,7 +48,7 @@ Title check
 • Databoks: https://databoks.katadata.co.id/en/agroindustry/statistics/6c26e3acf9df502/indonesias-durian-production-decreased-in-2020
 
 🎞 Footage & images
-Stock footage: Pexels and Pixabay (free licences). Some scenes are AI-generated illustrations.
+Stock footage: Pexels and Pixabay (free licences). Some scenes are AI-generated illustrations, and the music and narration voice are AI-generated (ElevenLabs).
 Archival photos via Wikimedia Commons (cropped and colour graded):
 • China–Laos Railway at Vientiane station: Dominik Landwehr, CC BY-SA 4.0
 • Mohan–Boten border monument: Fuwuyuan, CC BY-SA 3.0
