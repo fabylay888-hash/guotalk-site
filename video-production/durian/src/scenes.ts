@@ -85,10 +85,10 @@ export const SCENES: Record<string, Beat[]> = {
   '02-gold-rush': [
     {source: 'VAN', overlay: {type: 'map', map: 'thailand-only'}},
     {overlay: {type: 'map', map: 'vietnam-opens'}},
-    {broll: ['durian-harvest', ...ORCHARD], tr: 'burn', overlay: {type: 'callout', text: 'A gold rush.'}},
+    {broll: ['durian-harvest', 'ai-durian-farmer', ...ORCHARD], tr: 'burn', overlay: {type: 'callout', text: 'A gold rush.'}},
     {source: 'AFP via The Vibes', overlay: {type: 'statover', value: '$180m → $4bn', label: "Vietnam's durian exports, 2021 → 2026 (expected)", sub: 'durian land: 5× in a decade', ids: ['vietnam-orchard-aerial', ...ORCHARD]}},
     {source: 'Produce Report', overlay: {type: 'seq', at: [0, 0.5], parts: [{type: 'statover', value: 'coffee ✗', label: 'Vietnam: coffee trees cut down', ids: ['ai-chainsaw-coffee']}, {type: 'statover', value: 'rubber ✗', label: 'southern Thailand: rubber ripped out', ids: ['rubber-plantation', 'ai-durian-orchard']}]}},
-    {source: 'The Standard', overlay: {type: 'map', map: 'malaysia'}},
+    {source: 'The Standard', overlay: {type: 'seq', at: [0, 0.42], parts: [{type: 'map', map: 'malaysia'}, {type: 'statover', value: 'mangosteen', label: 'once the cheap fruit, now pricier than some premium durians', ids: ['mangosteen']}]}},
     {tr: 'whip', overlay: {type: 'split', title: 'Durian exports to China, 2025', left: {ids: ['thailand-durian-farm', 'ai-durian-market'], label: 'Thailand · by value', value: '< $4bn'}, right: {ids: ['vietnam-orchard-aerial', 'ai-durian-orchard'], label: 'Vietnam · now #1 by volume', value: '$3.44bn'}}},
     {broll: ['storm-clouds-farm', ...ORCHARD], overlay: {type: 'callout', text: 'Every gold rush has casualties.'}},
     {source: 'AFP via The Vibes', overlay: {type: 'board', cards: [
@@ -96,7 +96,7 @@ export const SCENES: Record<string, Beat[]> = {
       {key: 'fail', x: 740, y: 150, rot: 2, w: 460, title: '2 years later', text: "couldn't meet buyers' quality standards", at: 30, red: true},
       {key: 'back', x: 1340, y: 420, rot: -2, w: 460, title: 'Back to coffee.', text: '"never again" (to AFP)', at: 70},
     ], strings: [['hung', 'fail', 44], ['fail', 'back', 84]]}},
-    {broll: ['durian-orchard-dusk', ...ORCHARD], overlay: {type: 'callout', text: 'You can do everything right, and still fail.', sub: 'Lan, on growing durian'}},
+    {broll: ['durian-young', ...ORCHARD], overlay: {type: 'callout', text: 'You can do everything right, and still fail.', sub: 'Lan: growing durian is like raising a child'}},
   ],
   '03-durian-express': [
     {broll: ['ai-truck-clock'], overlay: {type: 'scribbles', items: [{text: 'the clock is ticking...', x: 1060, y: 160, delay: 20}]}},
