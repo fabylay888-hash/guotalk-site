@@ -100,7 +100,7 @@ export const SCENES: Record<string, Beat[]> = {
   ],
   '03-durian-express': [
     {broll: ['ai-truck-clock'], overlay: {type: 'scribbles', items: [{text: 'the clock is ticking...', x: 1060, y: 160, delay: 20}]}},
-    {broll: ['durian-packing', 'ai-packing-line'], source: 'Produce Report', overlay: {type: 'scribbles', items: [{text: 'picked before ripe', x: 980, y: 180, delay: 30}]}},
+    {broll: ['durian-orchard', 'ai-packing-line'], source: 'Produce Report', overlay: {type: 'scribbles', items: [{text: 'picked before ripe', x: 980, y: 180, delay: 30}]}},
     {broll: ['highway-trucks', 'ai-truck-clock'], tr: 'whip', overlay: {type: 'callout', text: 'Faster.'}},
     {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.42, 0.68], parts: [{type: 'map', map: 'rail'}, {type: 'statover', value: '26 h', label: 'Thailand → Kunming on the China–Laos Railway', ids: ['china-laos-railway', 'ai-freight-train']}, {type: 'map', map: 'cities'}]}},
     {source: 'Xinhua via The Star', tr: 'whip', overlay: {type: 'depart', title: 'KUNMING · COLD-CHAIN FREIGHT · DURIAN', rows: [['06:10', 'VIENTIANE', 'ON TIME'], ['09:40', 'VIENTIANE', 'ON TIME'], ['13:05', 'BOTEN', 'ON TIME'], ['16:30', 'VIENTIANE', 'ON TIME'], ['20:15', 'BOTEN', 'ON TIME'], ['23:50', 'VIENTIANE', 'ON TIME']], footer: 'up to 6 trains a day · 50,300 t of durian, Jan–Apr 2026 (≈2× a year earlier)'}},
