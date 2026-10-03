@@ -3,3 +3,4 @@ out/
 tools/.shotlist-bundle.mjs
 __pycache__/
 tools/.fetch-bundle.mjs
+public/shorts/s*.mp4
