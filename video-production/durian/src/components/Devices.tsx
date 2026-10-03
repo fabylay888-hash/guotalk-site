@@ -647,3 +647,114 @@ export const Homegrown: React.FC<{label: string; share: string; cost: string; ca
     </Paper>
   );
 };
+
+// "Timing is everything": a schematic price curve; an early planter's trees mature at the peak, a late planter's as prices soften.
+const Tree: React.FC<{x: number; y: number; s: number; grown: number}> = ({x, y, s, grown}) => {
+  const h = 30 + 110 * grown;
+  return (
+    <svg width={200} height={220} viewBox="-100 -200 200 220" style={{position: 'absolute', left: x - 100, top: y - 200, transform: `scale(${s})`, transformOrigin: '50% 91%', overflow: 'visible'}}>
+      <rect x={-6} y={-h * 0.55} width={12} height={h * 0.55} fill="#6B4A2E" stroke={C.ink} strokeWidth={3} />
+      {grown < 0.35 ? (
+        <>
+          <path d={`M 0 ${-h * 0.5} q -26 -16 -34 -2 q 18 10 34 2`} fill="#5E9C45" stroke={C.ink} strokeWidth={3} />
+          <path d={`M 0 ${-h * 0.5} q 26 -16 34 -2 q -18 10 -34 2`} fill="#5E9C45" stroke={C.ink} strokeWidth={3} />
+        </>
+      ) : (
+        <>
+          <circle cx={0} cy={-h * 0.72} r={h * 0.36} fill="#4F8A3C" stroke={C.ink} strokeWidth={3} />
+          <circle cx={-h * 0.24} cy={-h * 0.6} r={h * 0.22} fill="#5E9C45" stroke={C.ink} strokeWidth={3} />
+          <circle cx={h * 0.24} cy={-h * 0.6} r={h * 0.22} fill="#5E9C45" stroke={C.ink} strokeWidth={3} />
+          {grown > 0.9 && [-0.2, 0.12, 0.3].map((k, i) => <circle key={i} cx={k * h} cy={-h * (0.5 + 0.1 * i)} r={9} fill={C.gold} stroke={C.ink} strokeWidth={2.5} />)}
+        </>
+      )}
+    </svg>
+  );
+};
+
+export const TimingCurve: React.FC<{title: string; split: number; early: [number, number]; late: [number, number]; now: number; dur: number}> = ({title, split, early, late, now, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const X = (yr: number) => 200 + (yr - 2014) * 95;
+  const G = 820, H = 470;
+  const pts: [number, number][] = [[2014, 0.12], [2016, 0.22], [2018, 0.38], [2020, 0.6], [2022, 0.86], [2023, 0.96], [2024, 0.93], [2025, 0.82], [2026, 0.66], [2027, 0.56], [2028, 0.5], [2030, 0.45]];
+  const val = (yr: number) => {
+    for (let i = 1; i < pts.length; i++) if (yr <= pts[i][0]) { const [a, va] = pts[i - 1]; const [b, vb] = pts[i]; return va + (vb - va) * (yr - a) / (b - a); }
+    return pts[pts.length - 1][1];
+  };
+  const Y = (v: number) => G - v * H;
+  // Catmull-Rom through the points, as cubic beziers.
+  const smooth = (ps: [number, number][]) => {
+    const P = ps.map(([yr, v]) => [X(yr), Y(v)]);
+    let d = `M ${P[0][0]} ${P[0][1]}`;
+    for (let i = 0; i < P.length - 1; i++) {
+      const p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)];
+      d += ` C ${p1[0] + (p2[0] - p0[0]) / 6} ${p1[1] + (p2[1] - p0[1]) / 6}, ${p2[0] - (p3[0] - p1[0]) / 6} ${p2[1] - (p3[1] - p1[1]) / 6}, ${p2[0]} ${p2[1]}`;
+    }
+    return d;
+  };
+  const past = pts.filter(([yr]) => yr <= now);
+  const fut = pts.filter(([yr]) => yr >= now);
+  const draw = interpolate(frame, [4, 70], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const drawF = interpolate(frame, [split + 10, split + 60], [0, 1], clamp);
+  const titleIn = useIn(0);
+  // early planter
+  const e0 = spring({frame: frame - 8, fps, config: {damping: 12}});
+  const eGrow = interpolate(frame, [16, 52], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+  const eStamp = spring({frame: frame - 54, fps, config: {damping: 9, stiffness: 160}});
+  // late planter
+  const l0 = spring({frame: frame - split, fps, config: {damping: 12}});
+  const lGrow = interpolate(frame, [split + 8, split + 50], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+  const lStamp = spring({frame: frame - split - 58, fps, config: {damping: 10, stiffness: 150}});
+  const push = interpolate(frame, [0, dur], [1, 1.05], clamp);
+  const ex = X(early[0]) + (X(early[1]) - X(early[0])) * eGrow;
+  const lx = X(late[0]) + (X(late[1]) - X(late[0])) * lGrow;
+  const ey = Y(val(early[1])), ly = Y(val(late[1]));
+  const bracket = (a: number, b: number, y: number, t: number, col: string, op: number) => (
+    <g opacity={op}>
+      <path d={`M ${X(a)} ${y - 12} V ${y} H ${X(a) + (X(b) - X(a)) * t} V ${y - 12 * (t > 0.98 ? 1 : 0)}`} fill="none" stroke={col} strokeWidth={5} strokeLinecap="round" />
+    </g>
+  );
+  return (
+    <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '50% 60%'}}>
+        <svg width={1920} height={1080} style={{position: 'absolute'}}>
+          {/* now band */}
+          <rect x={X(now)} y={G - H - 40} width={X(2030) - X(now)} height={H + 40} fill="rgba(215,51,42,0.07)" opacity={drawF} />
+          <line x1={X(now)} x2={X(now)} y1={G - H - 40} y2={G} stroke={C.marker} strokeWidth={3} strokeDasharray="8 8" opacity={drawF} />
+          {/* axis */}
+          <line x1={170} x2={1760} y1={G} y2={G} stroke={C.ink} strokeWidth={5} />
+          {[2014, 2016, 2018, 2020, 2022, 2024, 2026, 2028, 2030].map((yr) => (
+            <g key={yr}>
+              <line x1={X(yr)} x2={X(yr)} y1={G} y2={G + 12} stroke={C.ink} strokeWidth={3} />
+              <text x={X(yr)} y={G + 44} textAnchor="middle" fontFamily={TYPE} fontSize={28} fill={C.ink}>{yr}</text>
+            </g>
+          ))}
+          {/* price curve */}
+          <path d={smooth(past)} fill="none" stroke={C.marker} strokeWidth={9} strokeLinecap="round" pathLength={1} strokeDasharray={`${draw} 1`} />
+          <path d={smooth(fut)} fill="none" stroke={C.marker} strokeWidth={7} strokeLinecap="round" strokeDasharray="4 18" opacity={drawF} />
+          {/* drop lines from the curve to each harvest */}
+          <line x1={X(early[1])} x2={X(early[1])} y1={ey + 16} y2={G - 150} stroke={C.ink} strokeWidth={3} strokeDasharray="6 8" opacity={eStamp} />
+          <line x1={X(late[1])} x2={X(late[1])} y1={ly + 16} y2={G - 150} stroke={C.ink} strokeWidth={3} strokeDasharray="6 8" opacity={lStamp} />
+          <circle cx={X(early[1])} cy={ey} r={14 * eStamp} fill={C.gold} stroke={C.ink} strokeWidth={4} />
+          <circle cx={X(late[1])} cy={ly} r={14 * lStamp} fill="#fff" stroke={C.marker} strokeWidth={5} />
+          {/* 5–8 yr growing brackets */}
+          {bracket(early[0], early[1], G + 86, eGrow, C.goldDeep, e0)}
+          {bracket(late[0], late[1], G + 132, lGrow, C.inkSoft, l0)}
+        </svg>
+        <div style={{position: 'absolute', left: X(early[0]) + 6, top: G + 92, fontFamily: HAND, fontSize: 34, color: C.goldDeep, opacity: eGrow}}>early planters</div>
+        <div style={{position: 'absolute', left: X(late[0]) + 6, top: G + 138, fontFamily: HAND, fontSize: 34, color: C.inkSoft, opacity: lGrow}}>boom planters</div>
+        {/* trees walk along the years as they grow */}
+        <Tree x={ex} y={G} s={e0} grown={eGrow} />
+        <Tree x={lx} y={G} s={l0} grown={lGrow} />
+        {/* stamps */}
+        <div style={{position: 'absolute', left: X(early[1]) - 260, top: ey - 150, fontFamily: MARKER, fontSize: 64, color: C.goldDeep, transform: `rotate(-8deg) scale(${eStamp})`, opacity: eStamp, textShadow: `3px 3px 0 ${C.paper}`}}>$$ fortunes</div>
+        <div style={{position: 'absolute', left: X(late[1]) - 120, top: ly - 215, fontFamily: MARKER, fontSize: 58, color: C.marker, transform: `rotate(-4deg) scale(${lStamp})`, transformOrigin: 'left center', opacity: lStamp, textShadow: `3px 3px 0 ${C.paper}`}}>prices soften ↓</div>
+        <div style={{position: 'absolute', left: X(now) + 10, top: G - H - 32, fontFamily: TYPE, fontSize: 26, color: C.marker, opacity: drawF}}>NOW</div>
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 170, top: 56, opacity: titleIn}}>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 66, color: C.ink, letterSpacing: -2}}>{title}</div>
+        <div style={{fontFamily: TYPE, fontSize: 28, color: C.inkSoft, marginTop: 6}}><span style={{color: C.marker}}>━━</span> durian price, schematic · trees take 5–8 years to full production</div>
+      </div>
+    </Paper>
+  );
+};

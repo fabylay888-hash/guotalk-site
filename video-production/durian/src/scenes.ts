@@ -29,6 +29,7 @@ export type Overlay =
   | {type: 'statover'; value: string; label: string; sub?: string; ids?: string[]; center?: boolean}
   | {type: 'mapdive'; map: string; ids?: string[]; at: number}
   | {type: 'homegrown'; label: string; share: string; cost: string; cardTitle: string; cardText: string; mark: string; at: [number, number, number]}
+  | {type: 'timing'; title: string; split: number; early: [number, number]; late: [number, number]; now: number}
   | {type: 'tonnage'; value: number; unit: string; caption: string; prevLabel: string; curLabel: string; times: string; note: string}
   | {type: 'growth'; fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]}
   // Several full-frame graphics back to back inside one paragraph; `at` = start fractions.
@@ -138,7 +139,7 @@ export const SCENES: Record<string, Beat[]> = {
   '07-close': [
     {overlay: {type: 'map', map: 'highlands'}},
     {overlay: {type: 'statover', value: '~90%', label: 'of global durian exports, one buyer', sub: 'prices · standards · speed', ids: MARKET}},
-    {broll: ORCHARD},
+    {overlay: {type: 'timing', title: 'Timing is everything', split: 92, early: [2016, 2022], late: [2021, 2027], now: 2026}},
     {broll: ['coffee-and-durian', ...COFFEE, 'ai-durian-orchard'], overlay: {type: 'callout', text: '400 durian trees. And still, coffee.'}},
     {overlay: {type: 'map', map: 'world'}},
     {overlay: {type: 'map', map: 'zhuji'}},

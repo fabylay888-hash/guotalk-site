@@ -5,7 +5,7 @@ import {MAPS} from '../maps';
 import {C, CJK, HAND, MARKER, SANS, TYPE} from '../theme';
 import {MapScene} from './MapScene';
 import {Paper} from './Paper';
-import {Board, Clock, Growth, Homegrown, RailTonnage, MapDive, DepartureBoard, DocForm, IconGrid, PhoneFeed, PriceTag, Receipt, Split, StatOver} from './Devices';
+import {Board, Clock, Growth, Homegrown, TimingCurve, RailTonnage, MapDive, DepartureBoard, DocForm, IconGrid, PhoneFeed, PriceTag, Receipt, Split, StatOver} from './Devices';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const useIn = (delay = 0) => {
@@ -19,7 +19,7 @@ const useSweep = (delay: number, len = 14) => {
 };
 
 // Graphics that own the whole frame (drawn on paper) vs. ones laid over footage.
-export const FULL_FRAME = new Set<Overlay['type']>(['stat', 'bars', 'quote', 'note', 'timeline', 'price', 'route', 'map', 'grid', 'receipt', 'tag', 'clock', 'depart', 'phone', 'board', 'doc', 'split', 'statover', 'seq', 'mapdive', 'growth', 'tonnage', 'homegrown']);
+export const FULL_FRAME = new Set<Overlay['type']>(['stat', 'bars', 'quote', 'note', 'timeline', 'price', 'route', 'map', 'grid', 'receipt', 'tag', 'clock', 'depart', 'phone', 'board', 'doc', 'split', 'statover', 'seq', 'mapdive', 'growth', 'tonnage', 'homegrown', 'timing']);
 
 // Yellow highlighter swiping across text, like a marked-up document.
 const Hi: React.FC<{children: React.ReactNode; delay: number}> = ({children, delay}) => {
@@ -291,6 +291,7 @@ export const OverlayView: React.FC<{o: Overlay; dur: number; onPaper: boolean}> 
     case 'mapdive': return <MapDive spec={MAPS[o.map]} ids={o.ids} at={o.at} dur={dur} />;
     case 'growth': return <Growth {...o} dur={dur} />;
     case 'homegrown': return <Homegrown {...o} dur={dur} />;
+    case 'timing': return <TimingCurve {...o} dur={dur} />;
     case 'tonnage': return <RailTonnage {...o} dur={dur} />;
     case 'seq':
       return (
