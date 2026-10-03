@@ -22,6 +22,8 @@ export type MapSpec = {
   title?: string;
   // Tilted 3D camera (perspective) instead of flat top-down paper map.
   tilt?: boolean;
+  // Big country name fixed at the top of the frame.
+  header?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -119,6 +121,9 @@ export const MapScene: React.FC<{spec: MapSpec; dur: number}> = ({spec, dur}) =>
           </div>
         );
       })}
+      {spec.header ? (
+        <div style={{position: 'absolute', left: 0, right: 0, top: 46, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 110, letterSpacing: 18, color: C.ink, opacity: appear(4), textShadow: `0 0 18px ${C.paper}, 0 0 4px ${C.paper}`}}>{spec.header}</div>
+      ) : null}
       {spec.title ? (
         <div style={{position: 'absolute', left: 56, top: 44, fontFamily: TYPE, fontSize: 30, color: C.ink, background: C.paper, padding: '8px 16px', boxShadow: '0 3px 10px rgba(0,0,0,0.2)', opacity: appear(0)}}>{spec.title}</div>
       ) : null}

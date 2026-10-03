@@ -46,13 +46,12 @@ export const CITIES: [number, number][] = [
 
 export const MAPS: Record<string, MapSpec> = {
   highlands: {
-    from: {c: [105, 17], z: 1700},
-    to: {c: [108.3, 13.2], z: 8000},
+    from: {c: [106, 15.5], z: 1600},
+    to: {c: [108.04, 12.67], z: 9000},
     highlight: {Vietnam: 'gold'},
-    labels: [{at: [108.5, 14.6], text: 'Central Highlands', size: 34, delay: 60}],
-    pins: [{at: [108.04, 12.67], label: 'Đắk Lắk', delay: 70}],
-    notes: [{text: 'coffee country', x: 1220, y: 300, delay: 90}],
-    title: 'VIETNAM',
+    pins: [{at: [108.04, 12.67], label: 'Đắk Lắk', delay: 40}],
+    notes: [{text: "Vietnam's coffee capital", x: 1010, y: 620, delay: 60, size: 50}],
+    header: 'VIETNAM',
   },
   'china-glow': {
     from: {c: [108, 14], z: 5000},

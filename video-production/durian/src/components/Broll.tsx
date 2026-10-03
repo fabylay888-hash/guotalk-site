@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import available from '../available.json';
-import {C, SANS} from '../theme';
+import {C} from '../theme';
 
 const AVAIL = available as Record<string, string>;
 export const pickBroll = (ids?: string[]) => ids?.find((id) => AVAIL[id]);
@@ -25,12 +25,7 @@ export const Broll: React.FC<{id: string; durationInFrames: number; seed: number
       ) : (
         <Img src={staticFile(`broll/${file}`)} style={{width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${scale}) translateX(${x}px)`, filter: grade}} />
       )}
-      {id.startsWith('ai-') ? <AiTag /> : null}
     </AbsoluteFill>
   );
 };
 
-// Synthetic imagery is labelled on screen (and should be disclosed in YouTube Studio).
-const AiTag: React.FC = () => (
-  <div style={{position: 'absolute', left: 48, top: 40, fontFamily: SANS, fontSize: 22, color: C.bone, background: 'rgba(8,5,5,0.55)', padding: '6px 14px', borderRadius: 6, opacity: 0.85}}>AI illustration</div>
-);

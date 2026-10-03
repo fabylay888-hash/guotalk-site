@@ -4,6 +4,7 @@ import available from '../available.json';
 import {C, CJK, HAND, MARKER, SANS, TYPE} from '../theme';
 import {Broll, pickBroll} from './Broll';
 import {Paper} from './Paper';
+import {MapScene, type MapSpec} from './MapScene';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const AVAIL = available as Record<string, string>;
@@ -405,5 +406,74 @@ export const StatOver: React.FC<{value: string; label: string; sub?: string; ids
         {sub ? <div style={{fontFamily: MARKER, fontSize: 40, color: C.gold, marginTop: 16, opacity: s}}>{sub}</div> : null}
       </div>
     </AbsoluteFill>
+  );
+};
+
+/* ---------------- Map → footage dive (circle opens from the pin) ---------------- */
+export const MapDive: React.FC<{spec: MapSpec; ids?: string[]; at: number; dur: number}> = ({spec, ids, at, dur}) => {
+  const frame = useCurrentFrame();
+  const start = Math.round(at * dur);
+  // The circle grows from the screen centre (the camera ends centred on the pin).
+  const r = interpolate(frame, [start, start + 18], [0, 1250], {...clamp, easing: Easing.in(Easing.cubic)});
+  const zoom = interpolate(frame, [start, dur + 10], [1.35, 1.05], clamp);
+  return (
+    <AbsoluteFill>
+      <MapScene spec={spec} dur={start + 6} />
+      {frame >= start ? (
+        <AbsoluteFill style={{clipPath: `circle(${r}px at 960px 540px)`}}>
+          <AbsoluteFill style={{transform: `scale(${zoom})`}}>
+            <Media ids={ids} dur={dur - start} />
+          </AbsoluteFill>
+        </AbsoluteFill>
+      ) : null}
+      {frame >= start && r < 1240 ? (
+        <svg width={1920} height={1080} style={{position: 'absolute', pointerEvents: 'none'}}>
+          <circle cx={960} cy={540} r={r} fill="none" stroke={C.paper} strokeWidth={10} />
+        </svg>
+      ) : null}
+    </AbsoluteFill>
+  );
+};
+
+/* ---------------- Spending growth: small bar vs a tower that shoots up, ×N marker ---------------- */
+export const Growth: React.FC<{fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]; dur: number}> = ({fromLabel, toLabel, toValue, prefix, suffix, times, caption, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const ground = 930;
+  const H = 760; // tower height
+  const small = H / 12;
+  const smallIn = spring({frame: frame - 4, fps, config: {damping: 200}});
+  const grow = interpolate(frame, [22, 80], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const towerH = small + (H - small) * grow;
+  const val = (toValue / 12) + (toValue - toValue / 12) * grow;
+  const shake = grow > 0 && grow < 1 ? Math.sin(frame * 2.3) * 2 : 0;
+  const mark = spring({frame: frame - 88, fps, config: {damping: 11, stiffness: 150}});
+  const capIn = useIn(100);
+  const push = interpolate(frame, [0, dur], [1, 1.06], clamp);
+  return (
+    <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '50% 70%'}}>
+        <div style={{position: 'absolute', left: 160, right: 160, top: ground, height: 6, background: C.ink}} />
+        {/* a decade earlier */}
+        <div style={{position: 'absolute', left: 430, top: ground - small * smallIn, width: 240, height: small * smallIn, background: C.inkSoft}} />
+        <div style={{position: 'absolute', left: 330, top: ground - small - 120, width: 440, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 64, color: C.inkSoft, opacity: smallIn}}>{prefix}{(toValue / 12).toFixed(1)}{suffix}</div>
+        <div style={{position: 'absolute', left: 330, top: ground + 22, width: 440, textAlign: 'center', fontFamily: TYPE, fontSize: 36, color: C.ink}}>{fromLabel}</div>
+        {/* last year */}
+        <div style={{position: 'absolute', left: 1130 + shake, top: ground - towerH, width: 280, height: towerH, background: `repeating-linear-gradient(0deg, ${C.marker} 0 24px, #B8261F 24px 28px)`, boxShadow: '8px 8px 0 rgba(0,0,0,0.15)', borderRadius: '6px 6px 0 0'}} />
+        <div style={{position: 'absolute', left: 1430, top: ground - towerH - 10, fontFamily: SANS, fontWeight: 800, fontSize: 112, color: C.ink, letterSpacing: -4, fontVariantNumeric: 'tabular-nums', opacity: grow > 0 ? 1 : 0}}>
+          {prefix}{val.toFixed(1)}{suffix}
+        </div>
+        <div style={{position: 'absolute', left: 1050, top: ground + 22, width: 440, textAlign: 'center', fontFamily: TYPE, fontSize: 36, color: C.ink}}>{toLabel}</div>
+        {/* ×12 marker */}
+        <svg width={1920} height={1080} style={{position: 'absolute', opacity: mark}}>
+          <path d={`M 690 ${ground - small - 10} C 850 ${ground - small - 60}, 950 ${ground - H + 40}, 1110 ${ground - H + 10}`} fill="none" stroke={C.marker} strokeWidth={8} strokeDasharray="18 12" strokeLinecap="round" />
+          <path d={`M 1110 ${ground - H + 10} l -34 -8 M 1110 ${ground - H + 10} l -24 26`} stroke={C.marker} strokeWidth={8} strokeLinecap="round" />
+        </svg>
+        <div style={{position: 'absolute', left: 700, top: ground - H * 0.62, fontFamily: MARKER, fontSize: 170, color: C.marker, transform: `rotate(-10deg) scale(${0.4 + 0.6 * mark})`, opacity: mark}}>{times}</div>
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 50, textAlign: 'center', opacity: capIn}}>
+        <span style={{fontFamily: TYPE, fontSize: 42, color: C.ink, borderBottom: `3px solid ${C.ink}`, paddingBottom: 6}}>{caption}</span>
+      </div>
+    </Paper>
   );
 };

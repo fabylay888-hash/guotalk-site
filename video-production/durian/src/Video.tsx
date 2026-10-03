@@ -19,12 +19,14 @@ const Chapter: React.FC<{id: string; dur: number}> = ({id, dur}) => {
         const to = i + 1 < ch.paras.length ? Math.round(ch.paras[i + 1].start * FPS) : dur;
         const beat = beats[i];
         if (!beat) return null;
-        const len = Math.max(1, to - from);
+        // Start each beat 10 frames early so it dissolves over the previous one.
+        const xf = i > 0 && beat.tr !== 'whip' ? 10 : 0;
+        const len = Math.max(1, to - from + xf);
         const full = beat.overlay && FULL_FRAME.has(beat.overlay.type);
         const clip = full ? undefined : pickBroll(beat.broll);
         const onPaper = !clip;
         return (
-          <Sequence key={i} from={from} durationInFrames={len} name={`${id} ¶${i + 1}: ${clip ?? beat.overlay?.type ?? 'paper'}`}>
+          <Sequence key={i} from={from - xf} durationInFrames={len} name={`${id} ¶${i + 1}: ${clip ?? beat.overlay?.type ?? 'paper'}`}>
             <BeatIn tr={beat.tr}>
               {clip ? <Broll id={clip} durationInFrames={len} seed={i + id.length} /> : full ? null : <Paper />}
               {beat.overlay ? <OverlayView o={beat.overlay} dur={len} onPaper={onPaper} /> : null}
@@ -41,7 +43,10 @@ const Chapter: React.FC<{id: string; dur: number}> = ({id, dur}) => {
 // Whip pan: the new beat slides in fast with motion blur.
 const BeatIn: React.FC<{tr?: 'whip' | 'burn'; children: React.ReactNode}> = ({tr, children}) => {
   const frame = useCurrentFrame();
-  if (tr !== 'whip') return <AbsoluteFill>{children}</AbsoluteFill>;
+  if (tr !== 'whip') {
+    const o = interpolate(frame, [0, 10], [0, 1], {extrapolateRight: 'clamp'});
+    return <AbsoluteFill style={{opacity: o}}>{children}</AbsoluteFill>;
+  }
   const t = interpolate(frame, [0, 8], [1, 0], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   return <AbsoluteFill style={{transform: `translateX(${t * 70}%)`, filter: t > 0.01 ? `blur(${t * 24}px)` : undefined}}>{children}</AbsoluteFill>;
 };

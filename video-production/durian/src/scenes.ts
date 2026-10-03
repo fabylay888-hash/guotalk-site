@@ -27,6 +27,8 @@ export type Overlay =
   | {type: 'doc'; header: string; fields: [string, string][]; stamp?: string; note?: string}
   | {type: 'split'; left: {ids?: string[]; label: string; value: string}; right: {ids?: string[]; label: string; value: string}; title?: string}
   | {type: 'statover'; value: string; label: string; sub?: string; ids?: string[]; center?: boolean}
+  | {type: 'mapdive'; map: string; ids?: string[]; at: number}
+  | {type: 'growth'; fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]}
   // Several full-frame graphics back to back inside one paragraph; `at` = start fractions.
   | {type: 'seq'; parts: Overlay[]; at: number[]};
 
@@ -53,7 +55,7 @@ const CN = {key: 'china', x: 810, y: 430, rot: 0, title: 'CHINA', text: 'buys ~9
 
 export const SCENES: Record<string, Beat[]> = {
   '00-cold-open': [
-    {overlay: {type: 'seq', at: [0, 0.45], parts: [{type: 'statover', value: '', label: 'Central Highlands, Vietnam', ids: ['highlands-dawn', 'ai-durian-orchard']}, {type: 'map', map: 'highlands'}]}},
+    {overlay: {type: 'mapdive', map: 'highlands', ids: ['highlands-dawn', 'coffee-cherries', 'ai-coffee-picking'], at: 0.74}},
     {overlay: {type: 'statover', center: true, value: '#2', label: "Vietnam: world's no. 2 coffee producer", ids: COFFEE}},
     {source: 'AFP via The Vibes, 30 Aug 2026', tr: 'whip', overlay: {type: 'split', title: "Lan's expected income this year", left: {ids: COFFEE, label: 'coffee alone', value: '~$10,000'}, right: {ids: ['durian-orchard', 'ai-durian-farmer'], label: '400 durian trees', value: '~$76,000'}}},
     {broll: ['ai-villa'], overlay: {type: 'scribbles', items: [{text: 'car ✓', x: 1160, y: 640, delay: 10}, {text: 'villa ✓', x: 700, y: 120, delay: 70, rotate: 4}]}},
@@ -62,7 +64,10 @@ export const SCENES: Record<string, Beat[]> = {
       {key: 'q', x: 1060, y: 330, rot: 3, w: 640, title: '"You can live okay with coffee, but it\'s durian that makes you rich."', text: 'Lan, to AFP (Agence France-Presse, the French news agency)', at: 18},
     ], strings: [['lan', 'q', 34]]}},
     {overlay: {type: 'map', map: 'china-glow'}},
-    {source: 'The Standard; Produce Report', tr: 'burn', overlay: {type: 'grid', n: 90, big: '~90%', label: "Of every 100 durians the world exports...", sub: '~90 go to China'}},
+    {source: 'The Standard; Produce Report', tr: 'burn', overlay: {type: 'seq', at: [0, 0.4], parts: [
+      {type: 'grid', n: 90, big: '~90%', label: "Of every 100 durians the world exports...", sub: '~90 go to China'},
+      {type: 'growth', fromLabel: 'a decade earlier', toLabel: 'last year (2025)', toValue: 7.5, prefix: '$', suffix: 'bn', times: '×12', caption: "China's spending on durian imports", ids: ['ai-durian-market']},
+    ]}},
     {broll: ['saplings', ...ORCHARD], tr: 'whip', overlay: {type: 'callout', text: 'Replanted for one customer'}},
     {overlay: {type: 'statover', value: '↓', label: 'and this year, prices are falling', ids: MARKET}},
     {broll: DURIAN_OPEN, overlay: {type: 'callout', text: 'What happens when an entire industry depends on one buyer?'}},
