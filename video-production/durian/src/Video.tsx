@@ -129,20 +129,26 @@ const EndCard: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const p = spring({frame, fps, config: {damping: 200}});
-  // The two right-hand boxes stay empty: YouTube end-screen elements go there.
+  const card = spring({frame: frame - 6, fps, config: {damping: 14, stiffness: 110}});
+  const push = interpolate(frame, [0, 360], [1, 1.06], {extrapolateRight: 'clamp'});
+  // Left: teaser for the next video. Right: the two boxes stay empty for YouTube's end-screen elements.
   return (
     <Paper>
-      <div style={{position: 'absolute', left: 140, top: 380, opacity: p}}>
-        <div style={{fontFamily: TYPE, fontSize: 36, letterSpacing: 8, color: C.inkSoft}}>GUOTALK</div>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 92, color: C.ink, marginTop: 20, lineHeight: 1.08, letterSpacing: -3}}>
-          Next: the town that
-          <br />
-          makes the world's socks
+      <div style={{position: 'absolute', left: 120, top: 110, width: 900, transform: `translateY(${(1 - card) * 60}px) rotate(${-2 * card}deg)`, opacity: card}}>
+        <div style={{background: '#FBF6EA', padding: 18, paddingBottom: 22, boxShadow: '12px 14px 0 rgba(0,0,0,0.18)'}}>
+          <div style={{width: '100%', height: 486, overflow: 'hidden', position: 'relative'}}>
+            <Img src={staticFile('chapters/next-socks.jpg')} style={{width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${push})`}} />
+          </div>
         </div>
-        <div style={{fontFamily: MARKER, fontSize: 50, color: C.marker, marginTop: 30, transform: 'rotate(-2deg)'}}>subscribe →</div>
+        <div style={{position: 'absolute', top: -22, left: 40, padding: '8px 22px', background: C.marker, color: '#fff', fontFamily: TYPE, fontSize: 30, letterSpacing: 4, transform: 'rotate(-3deg)', boxShadow: '3px 4px 0 rgba(0,0,0,0.25)'}}>NEXT VIDEO</div>
+      </div>
+      <div style={{position: 'absolute', left: 140, top: 690, width: 900, opacity: p}}>
+        <div style={{fontFamily: TYPE, fontSize: 32, letterSpacing: 8, color: C.inkSoft}}>GUOTALK</div>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 76, color: C.ink, marginTop: 10, lineHeight: 1.05, letterSpacing: -3}}>The town that makes the world's socks</div>
+        <div style={{fontFamily: MARKER, fontSize: 48, color: C.marker, marginTop: 18, transform: 'rotate(-2deg)'}}>subscribe →</div>
       </div>
       {[0, 1].map((i) => (
-        <div key={i} style={{position: 'absolute', right: 140, top: 200 + i * 360, width: 560, height: 315, border: `3px dashed ${C.inkSoft}`, borderRadius: 16, opacity: 0.35 * p}} />
+        <div key={i} style={{position: 'absolute', right: 110, top: 200 + i * 360, width: 640, height: 300, border: `3px dashed ${C.inkSoft}`, borderRadius: 16, opacity: 0.3 * p}} />
       ))}
     </Paper>
   );
