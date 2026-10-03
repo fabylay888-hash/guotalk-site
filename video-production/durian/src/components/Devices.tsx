@@ -581,3 +581,69 @@ export const RailTonnage: React.FC<{value: number; unit: string; caption: string
     </Paper>
   );
 };
+
+// 100 durians; the one homegrown durian flies out to the right, then the cost note and the expert card land beside it.
+export const Homegrown: React.FC<{label: string; share: string; cost: string; cardTitle: string; cardText: string; mark: string; at: [number, number, number]; dur: number}> = ({label, share, cost, cardTitle, cardText, mark, at, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const p = useIn(0);
+  const [tFly, tCost, tCard] = at;
+  const fly = interpolate(frame, [tFly, tFly + 30], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const shareIn = spring({frame: frame - tFly - 26, fps, config: {damping: 12, stiffness: 150}});
+  const impIn = useIn(tFly + 40);
+  const costIn = spring({frame: frame - tCost, fps, config: {damping: 14}});
+  const card = spring({frame: frame - tCard, fps, config: {damping: 16, stiffness: 110}});
+  const hl = interpolate(frame, [tCard + 40, tCard + 70], [0, 1], clamp);
+  const push = interpolate(frame, [0, dur], [1, 1.04], clamp);
+  const cell = 64, gx = 150, gy = 200;
+  const bx = 1060, by = 210; // big homegrown durian
+  return (
+    <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '50% 50%'}}>
+        {Array.from({length: 100}).map((_, i) => {
+          const col = i % 10, row = Math.floor(i / 10);
+          const pop = interpolate(frame, [i * 0.25, i * 0.25 + 8], [0, 1], clamp);
+          const x0 = gx + col * cell, y0 = gy + row * cell;
+          if (i === 0) {
+            const size = 54 + (230 - 54) * fly;
+            const arc = Math.sin(fly * Math.PI) * -120;
+            return (
+              <div key={i} style={{position: 'absolute', left: x0 + (bx - x0) * fly, top: y0 + (by - y0) * fly + arc, transform: `scale(${pop}) rotate(${fly * 360}deg)`, filter: fly > 0.95 ? 'drop-shadow(6px 8px 0 rgba(0,0,0,0.18))' : undefined}}>
+                <DurianIcon size={size} color="#3F7A3A" />
+              </div>
+            );
+          }
+          return (
+            <div key={i} style={{position: 'absolute', left: x0, top: y0, transform: `scale(${pop}) rotate(${Math.sin((frame + i * 7) / 8) * 5}deg)`}}>
+              <DurianIcon size={54} color="#9BA05A" />
+            </div>
+          );
+        })}
+        {/* imported bracket under the grid */}
+        <div style={{position: 'absolute', left: gx, top: gy + 10 * cell + 6, width: 10 * cell - 10, height: 18, borderLeft: `4px solid ${C.ink}`, borderRight: `4px solid ${C.ink}`, borderBottom: `4px solid ${C.ink}`, opacity: impIn}} />
+        <div style={{position: 'absolute', left: gx, top: gy + 10 * cell + 36, width: 10 * cell - 10, textAlign: 'center', fontFamily: TYPE, fontSize: 40, color: C.ink, opacity: impIn}}>imported</div>
+        {/* homegrown label */}
+        <div style={{position: 'absolute', left: bx + 260, top: by + 20, opacity: shareIn, transform: `scale(${0.6 + 0.4 * shareIn})`, transformOrigin: 'left center'}}>
+          <div style={{fontFamily: TYPE, fontSize: 38, color: C.ink, letterSpacing: 2}}>HOMEGROWN</div>
+          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 150, color: '#3F7A3A', letterSpacing: -5, lineHeight: 1}}>{share}</div>
+        </div>
+        {/* cost note */}
+        <div style={{position: 'absolute', left: bx - 10, top: by + 270, fontFamily: HAND, fontSize: 58, color: C.marker, opacity: costIn, transform: `rotate(-3deg) translateY(${(1 - costIn) * 20}px)`}}>
+          {cost}
+          <div style={{height: 4, background: C.marker, width: `${costIn * 100}%`, borderRadius: 2}} />
+        </div>
+        {/* expert card */}
+        <div style={{position: 'absolute', left: 960, top: 650, width: 820, padding: '30px 38px', background: '#FBF6EA', boxShadow: '10px 12px 0 rgba(0,0,0,0.16)', transform: `translateX(${(1 - card) * 900}px) rotate(${-1.5 * card}deg)`, opacity: card > 0.01 ? 1 : 0}}>
+          <div style={{position: 'absolute', top: -14, left: '48%', width: 28, height: 28, borderRadius: 14, background: C.marker, boxShadow: '2px 3px 0 rgba(0,0,0,0.3)'}} />
+          <div style={{fontFamily: TYPE, fontSize: 28, color: C.inkSoft, marginBottom: 16}}>{cardTitle}</div>
+          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 46, lineHeight: 1.25, color: C.ink}}>
+            {cardText.split(mark)[0]}
+            <span style={{backgroundImage: `linear-gradient(${C.highlighter}, ${C.highlighter})`, backgroundRepeat: 'no-repeat', backgroundSize: `${hl * 100}% 100%`}}>{mark}</span>
+            {cardText.split(mark)[1]}
+          </div>
+        </div>
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 150, top: 60, fontFamily: SANS, fontWeight: 800, fontSize: 66, color: C.ink, opacity: p, letterSpacing: -2}}>{label}</div>
+    </Paper>
+  );
+};

@@ -28,6 +28,7 @@ export type Overlay =
   | {type: 'split'; left: {ids?: string[]; label: string; value: string}; right: {ids?: string[]; label: string; value: string}; title?: string}
   | {type: 'statover'; value: string; label: string; sub?: string; ids?: string[]; center?: boolean}
   | {type: 'mapdive'; map: string; ids?: string[]; at: number}
+  | {type: 'homegrown'; label: string; share: string; cost: string; cardTitle: string; cardText: string; mark: string; at: [number, number, number]}
   | {type: 'tonnage'; value: number; unit: string; caption: string; prevLabel: string; curLabel: string; times: string; note: string}
   | {type: 'growth'; fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]}
   // Several full-frame graphics back to back inside one paragraph; `at` = start fractions.
@@ -131,7 +132,7 @@ export const SCENES: Record<string, Beat[]> = {
     {broll: ['hainan-island', 'hainan-orchard', ...ORCHARD], overlay: {type: 'callout', text: 'China is growing its own.'}},
     {source: 'AFP via The Vibes', overlay: {type: 'seq', at: [0, 0.45], parts: [{type: 'map', map: 'hainan-close'}, {type: 'statover', value: 'Tree-ripened', label: "Hainan's pitch vs imports picked early for the journey", ids: ['durian-closeup-spikes', 'ai-durian-closeup']}]}},
     {broll: ORCHARD, tr: 'whip', overlay: {type: 'callout', text: 'Should Southeast Asia panic?'}},
-    {source: 'FreshPlaza; AFP via The Vibes', overlay: {type: 'grid', n: 1, target: '', hitColor: '#3F7A3A', label: 'Durian China eats: homegrown vs imported', sub: 'homegrown: < 1 in 100 (2025)'}},
+    {source: 'FreshPlaza; AFP via The Vibes', overlay: {type: 'homegrown', label: 'Durian China eats, 2025', share: '<1%', cost: '¥ and it still costs more to grow', cardTitle: 'What a durian expert at Hainan’s agricultural academy told AFP:', cardText: 'Chinese durian will only ever be a supplement to Southeast Asian durian.', mark: 'a supplement', at: [36, 204, 282]}},
     {overlay: {type: 'callout', text: "It's the math."}},
   ],
   '07-close': [
