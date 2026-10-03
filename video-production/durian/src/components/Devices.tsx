@@ -758,3 +758,99 @@ export const TimingCurve: React.FC<{title: string; split: number; early: [number
     </Paper>
   );
 };
+
+// "Always want more": durians pour into a porcelain bowl, faster and faster, while a year odometer rolls.
+const Odometer: React.FC<{value: number; size: number}> = ({value, size}) => {
+  const digits = 4;
+  const cols = Array.from({length: digits}, (_, k) => {
+    const p = digits - 1 - k;
+    const base = Math.floor(value / 10 ** p) % 10;
+    const below = value % 10 ** p;
+    const carry = p === 0 ? value % 1 : Math.max(0, below - (10 ** p - 1));
+    return base + carry;
+  });
+  return (
+    <div style={{display: 'flex', gap: 6}}>
+      {cols.map((d, i) => (
+        <div key={i} style={{width: size * 0.64, height: size * 1.1, overflow: 'hidden', background: C.ink, borderRadius: 10, position: 'relative', boxShadow: 'inset 0 10px 14px rgba(0,0,0,0.5)'}}>
+          <div style={{position: 'absolute', left: 0, right: 0, top: -(d % 10) * size * 1.1, transform: `translateY(0)`}}>
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n, j) => (
+              <div key={j} style={{height: size * 1.1, lineHeight: `${size * 1.1}px`, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: size, color: C.paper}}>{n}</div>
+            ))}
+          </div>
+          <div style={{position: 'absolute', left: 0, right: 0, top: '50%', height: 2, background: 'rgba(0,0,0,0.5)'}} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const Appetite: React.FC<{from: number; to: number; label: string; target: string; words: string[]; end: string; endAt: number; dur: number}> = ({from, to, label, target, words, end, endAt, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const N = 40;
+  const cx = 1060, mouth = 650, half = 400;
+  const yearT = interpolate(frame, [6, endAt - 10], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
+  const year = from + (to - from) * yearT;
+  const bowlIn = spring({frame, fps, config: {damping: 14}});
+  const endIn = spring({frame: frame - endAt, fps, config: {damping: 8, stiffness: 140}});
+  const wob = Math.sin(frame / 3) * 6 * endIn;
+  const push = interpolate(frame, [0, dur], [1, 1.06], clamp);
+  const fill = Math.min(1, Math.max(0, frame - 20) / (endAt - 20));
+  return (
+    <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '55% 60%'}}>
+        <svg width={1920} height={1080} style={{position: 'absolute'}}>
+          {/* back rim of the bowl */}
+          <ellipse cx={cx} cy={mouth} rx={half * bowlIn} ry={46 * bowlIn} fill="#D9CDB4" stroke={C.ink} strokeWidth={5} />
+          <ellipse cx={cx} cy={mouth + 8} rx={(half - 22) * bowlIn} ry={30 * bowlIn} fill="#3A2E22" opacity={0.85} />
+          {/* a mound that grows inside, but never fills up */}
+          <ellipse cx={cx} cy={mouth + 14 - 26 * fill} rx={(half - 40) * bowlIn} ry={22 + 10 * fill} fill="#9BA05A" opacity={0.6 * fill} />
+        </svg>
+        {/* falling durians: spawn faster and faster */}
+        {Array.from({length: N}).map((_, k) => {
+          const t0 = 12 + (endAt - 30) * Math.pow(k / N, 0.55);
+          const f = frame - t0;
+          if (f < 0 || f > 34) return null;
+          const fall = Math.min(1, f / 20);
+          const x = cx + (random(`ax${k}`) - 0.5) * (half * 1.4);
+          const y = -120 + (mouth - 10 + 120) * fall * fall;
+          const sink = Math.max(0, f - 20) / 14;
+          return (
+            <div key={k} style={{position: 'absolute', left: x - 52, top: y - 60 + sink * 50, opacity: 1 - sink, transform: `rotate(${(random(`ar${k}`) - 0.5) * 200 * fall}deg)`}}>
+              <DurianIcon size={104} color={C.gold} />
+            </div>
+          );
+        })}
+        <svg width={1920} height={1080} style={{position: 'absolute'}}>
+          {/* bowl front: blue-and-white porcelain */}
+          <g transform={`translate(${cx} ${mouth}) scale(${bowlIn}) translate(${-cx} ${-mouth})`}>
+            <path d={`M ${cx - half} ${mouth} C ${cx - half + 20} ${mouth + 300}, ${cx + half - 20} ${mouth + 300}, ${cx + half} ${mouth} A ${half} 46 0 0 1 ${cx - half} ${mouth} Z`} fill="#F6F1E6" stroke={C.ink} strokeWidth={6} />
+            <path d={`M ${cx - half + 18} ${mouth + 46} C ${cx - 120} ${mouth + 96}, ${cx + 120} ${mouth + 96}, ${cx + half - 18} ${mouth + 46}`} fill="none" stroke="#2B4C8C" strokeWidth={16} />
+            {[-2, -1, 0, 1, 2].map((i) => (
+              <path key={i} d={`M ${cx + i * 110 - 26} ${mouth + 150} q 26 -34 52 0 q -26 34 -52 0`} fill="none" stroke="#2B4C8C" strokeWidth={6} />
+            ))}
+            <rect x={cx - 110} y={mouth + 238} width={220} height={26} rx={8} fill="#F6F1E6" stroke={C.ink} strokeWidth={5} />
+          </g>
+        </svg>
+        <div style={{position: 'absolute', left: cx - 200, width: 400, top: mouth + 300, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 64, letterSpacing: 10, color: C.ink, opacity: bowlIn}}>{target}</div>
+        {/* "more" scribbles, each bigger than the last */}
+        {words.map((w, i) => {
+          const at = 40 + i * ((endAt - 60) / words.length);
+          const s = spring({frame: frame - at, fps, config: {damping: 10, stiffness: 160}});
+          const pos = [[1520, 330], [330, 520], [1500, 520]][i % 3];
+          return <div key={i} style={{position: 'absolute', left: pos[0], top: pos[1], fontFamily: MARKER, fontSize: 56 + i * 26, color: C.marker, opacity: s * (1 - endIn), transform: `rotate(${(i % 2 ? 6 : -7)}deg) scale(${s})`}}>{w}</div>;
+        })}
+      </AbsoluteFill>
+      {/* odometer */}
+      <div style={{position: 'absolute', left: 150, top: 120}}>
+        <div style={{fontFamily: TYPE, fontSize: 32, color: C.inkSoft, marginBottom: 14}}>{label}</div>
+        <Odometer value={year} size={130} />
+      </div>
+      {/* the question */}
+      <div style={{position: 'absolute', left: 0, right: 0, top: 150, textAlign: 'center', paddingLeft: 520, fontFamily: MARKER, fontSize: 170, color: C.ink, opacity: endIn, transform: `scale(${0.5 + 0.5 * endIn})`}}>
+        {end.slice(0, -1)}<span style={{display: 'inline-block', color: C.marker, transform: `rotate(${wob}deg)`, transformOrigin: '50% 90%'}}>{end.slice(-1)}</span>
+      </div>
+    </Paper>
+  );
+};

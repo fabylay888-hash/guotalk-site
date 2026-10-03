@@ -30,6 +30,7 @@ export type Overlay =
   | {type: 'mapdive'; map: string; ids?: string[]; at: number}
   | {type: 'homegrown'; label: string; share: string; cost: string; cardTitle: string; cardText: string; mark: string; at: [number, number, number]}
   | {type: 'timing'; title: string; split: number; early: [number, number]; late: [number, number]; now: number}
+  | {type: 'appetite'; from: number; to: number; label: string; target: string; words: string[]; end: string; endAt: number}
   | {type: 'tonnage'; value: number; unit: string; caption: string; prevLabel: string; curLabel: string; times: string; note: string}
   | {type: 'growth'; fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]}
   // Several full-frame graphics back to back inside one paragraph; `at` = start fractions.
@@ -51,7 +52,7 @@ export const CHAPTER_TITLES: Record<string, string | null> = {
 };
 
 const DURIAN_OPEN = ['durian-slowmo', 'durian-cut-open', 'ai-durian-open'];
-const ORCHARD = ['durian-orchard', 'vietnam-orchard-aerial', 'ai-durian-orchard'];
+const ORCHARD = ['vietnam-orchard-aerial', 'ai-durian-orchard'];
 const MARKET = ['china-market-durian', 'kunming-market', 'durian-pile', 'ai-durian-market'];
 const COFFEE = ['coffee-cherries', 'coffee-farmer-hands', 'coffee-and-durian', 'ai-coffee-picking'];
 const CN = {key: 'china', x: 810, y: 430, rot: 0, title: 'CHINA', text: 'buys ~90% of world durian exports', at: 0, red: true};
@@ -59,8 +60,8 @@ const CN = {key: 'china', x: 810, y: 430, rot: 0, title: 'CHINA', text: 'buys ~9
 export const SCENES: Record<string, Beat[]> = {
   '00-cold-open': [
     {overlay: {type: 'mapdive', map: 'highlands', ids: ['highlands-dawn', 'coffee-cherries', 'ai-coffee-picking'], at: 0.74}},
-    {overlay: {type: 'statover', center: true, value: '#2', label: "Vietnam: world's no. 2 coffee producer", ids: COFFEE}},
-    {source: 'AFP via The Vibes, 30 Aug 2026', tr: 'whip', overlay: {type: 'split', title: "Lan's expected income this year", left: {ids: COFFEE, label: 'coffee alone', value: '~$10,000'}, right: {ids: ['durian-orchard', 'ai-durian-farmer'], label: '400 durian trees', value: '~$76,000'}}},
+    {overlay: {type: 'statover', center: true, value: '#2', label: "Vietnam: world's no. 2 coffee producer", ids: ['coffee-cherries', 'ai-coffee-cherries']}},
+    {source: 'AFP via The Vibes, 30 Aug 2026', tr: 'whip', overlay: {type: 'split', title: "Lan's expected income this year", left: {ids: ['coffee-farmer-hands', 'ai-coffee-hands'], label: 'coffee alone', value: '~$10,000'}, right: {ids: ['ai-durian-open'], label: '400 durian trees', value: '~$76,000'}}},
     {broll: ['ai-villa'], overlay: {type: 'scribbles', items: [{text: 'car ✓', x: 1160, y: 640, delay: 10}, {text: 'villa ✓', x: 700, y: 120, delay: 70, rotate: 4}]}},
     {source: 'AFP via The Vibes', overlay: {type: 'board', cards: [
       {key: 'lan', x: 200, y: 200, rot: -4, w: 560, img: ['ai-villa'], title: 'Pham Xuan Lan', text: 'Central Highlands · coffee + 400 durian trees', at: 0},
@@ -71,14 +72,14 @@ export const SCENES: Record<string, Beat[]> = {
       {type: 'grid', n: 90, big: '~90%', label: "Of every 100 durians the world exports...", sub: '~90 go to China'},
       {type: 'growth', fromLabel: 'a decade earlier', toLabel: 'last year (2025)', toValue: 7.5, prefix: '$', suffix: 'bn', times: '×12', caption: "China's spending on durian imports", ids: ['ai-durian-market']},
     ]}},
-    {broll: ['saplings', ...ORCHARD], tr: 'whip', overlay: {type: 'callout', text: 'Replanted for one customer'}},
-    {overlay: {type: 'statover', value: '↓', label: 'and this year, prices are falling', ids: MARKET}},
+    {broll: ['saplings', 'ai-saplings'], tr: 'whip', overlay: {type: 'callout', text: 'Replanted for one customer'}},
+    {overlay: {type: 'statover', value: '↓', label: 'and this year, prices are falling', ids: ['ai-stall-dusk']}},
     {broll: DURIAN_OPEN, overlay: {type: 'callout', text: 'What happens when an entire industry depends on one buyer?'}},
   ],
   '01-king-of-fruits': [
-    {broll: ['durian-closeup-spikes', 'ai-durian-closeup'], overlay: {type: 'scribbles', items: [{text: 'BIG', x: 220, y: 200, delay: 30}, {text: 'SPIKES', x: 1300, y: 260, delay: 60, rotate: 6}, {text: 'the SMELL...', x: 760, y: 800, delay: 100, rotate: -3}]}},
-    {broll: DURIAN_OPEN},
-    {source: 'Produce Report; China Customs via ECNS', overlay: {type: 'receipt', title: 'CHINA FRUIT IMPORTS 2025', lines: [['DURIAN (fresh)', '$7.49bn'], ['  1.87m tonnes', '2× 2022'], ['BANANAS', '$1.06bn']], total: ['NO.1 BY VALUE', 'DURIAN'], footer: 'illustrative · source: China Customs', bg: MARKET}},
+    {broll: ['durian-closeup-spikes'], overlay: {type: 'scribbles', items: [{text: 'BIG', x: 220, y: 200, delay: 30}, {text: 'SPIKES', x: 1300, y: 260, delay: 60, rotate: 6}, {text: 'the SMELL...', x: 760, y: 800, delay: 100, rotate: -3}]}},
+    {broll: ['ai-friends-durian']},
+    {source: 'Produce Report; China Customs via ECNS', overlay: {type: 'receipt', title: 'CHINA FRUIT IMPORTS 2025', lines: [['DURIAN (fresh)', '$7.49bn'], ['  1.87m tonnes', '2× 2022'], ['BANANAS', '$1.06bn']], total: ['NO.1 BY VALUE', 'DURIAN'], footer: 'illustrative · source: China Customs', bg: ['ai-durian-market']}},
     {source: 'Douyin e-commerce report via VietNamNet', overlay: {type: 'phone', clips: ['phone-scroll', 'durian-slowmo', 'durian-cut-open', 'durian-cut-open-2', 'ai-durian-open', 'ai-durian-closeup', 'ai-durian-market'], counter: {label: 'durian orders, one platform, one year', value: 30000000}, caption: 'billions of views'}},
     {broll: ['durian-cut-open-2', ...DURIAN_OPEN], tr: 'whip', overlay: {type: 'callout', text: '榴莲自由', sub: '"durian freedom": buying one without checking the price'}},
     {overlay: {type: 'map', map: 'durian-belt'}},
@@ -89,7 +90,7 @@ export const SCENES: Record<string, Beat[]> = {
     {source: 'VAN', overlay: {type: 'map', map: 'thailand-only'}},
     {overlay: {type: 'map', map: 'vietnam-opens'}},
     {broll: ['durian-harvest', 'ai-durian-farmer', ...ORCHARD], tr: 'burn', overlay: {type: 'callout', text: 'A gold rush.'}},
-    {source: 'AFP via The Vibes', overlay: {type: 'statover', value: '$180m → $4bn', label: "Vietnam's durian exports, 2021 → 2026 (expected)", sub: 'durian land: 5× in a decade', ids: ['vietnam-orchard-aerial', ...ORCHARD]}},
+    {source: 'AFP via The Vibes', overlay: {type: 'statover', value: '$180m → $4bn', label: "Vietnam's durian exports, 2021 → 2026 (expected)", sub: 'durian land: 5× in a decade', ids: ['vietnam-orchard-aerial', 'ai-orchard-aerial']}},
     {source: 'Produce Report', overlay: {type: 'seq', at: [0, 0.5], parts: [{type: 'statover', value: 'coffee ✗', label: 'Vietnam: coffee trees cut down', ids: ['ai-chainsaw-coffee']}, {type: 'statover', value: 'rubber ✗', label: 'southern Thailand: rubber ripped out', ids: ['rubber-plantation', 'ai-durian-orchard']}]}},
     {source: 'The Standard', overlay: {type: 'seq', at: [0, 0.42], parts: [{type: 'map', map: 'malaysia'}, {type: 'statover', value: 'mangosteen', label: 'once the cheap fruit, now pricier than some premium durians', ids: ['mangosteen']}]}},
     {tr: 'whip', overlay: {type: 'split', title: 'Durian exports to China, 2025', left: {ids: ['thailand-durian-farm', 'ai-durian-market'], label: 'Thailand · by value', value: '< $4bn'}, right: {ids: ['vietnam-orchard-aerial', 'ai-durian-orchard'], label: 'Vietnam · now #1 by volume', value: '$3.44bn'}}},
@@ -107,9 +108,9 @@ export const SCENES: Record<string, Beat[]> = {
     {broll: ['highway-trucks', 'ai-truck-clock'], tr: 'whip', overlay: {type: 'callout', text: 'Faster.'}},
     {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.42, 0.68], parts: [{type: 'map', map: 'rail'}, {type: 'statover', value: '26 h', label: 'Thailand → Kunming on the China–Laos Railway', ids: ['china-laos-railway', 'ai-freight-train']}, {type: 'map', map: 'cities'}]}},
     {source: 'Xinhua via The Star', tr: 'whip', overlay: {type: 'seq', at: [0, 0.34], parts: [{type: 'depart', title: 'KUNMING · COLD-CHAIN FREIGHT · DURIAN', rows: [['06:10', 'VIENTIANE', 'ON TIME'], ['09:40', 'VIENTIANE', 'ON TIME'], ['13:05', 'BOTEN', 'ON TIME'], ['16:30', 'VIENTIANE', 'ON TIME'], ['20:15', 'BOTEN', 'ON TIME'], ['23:50', 'VIENTIANE', 'ON TIME']], footer: 'peak season: up to 6 trains a day (was 2)'}, {type: 'tonnage', value: 50300, unit: 't', caption: 'Durian carried on the China–Laos Railway', prevLabel: 'Jan–Apr 2025', curLabel: 'Jan–Apr 2026', times: '≈2×', note: 'almost double'}]}},
-    {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.6], parts: [{type: 'map', map: 'sea-route'}, {type: 'clock', mode: 'shrink', value: 0, unit: '', from: '4 hours', to: '15 min', label: 'Customs clearance at one border port', bg: ['container-ship', 'border-trucks', 'ai-durian-market']}]}},
-    {source: 'Xinhua via The Star', tr: 'burn', overlay: {type: 'tag', price: '¥28/kg', label: 'Thai durian, one Kunming wholesale market, spring 2026', bg: MARKET}},
-    {broll: ['supermarket-durian', ...MARKET], tr: 'whip', overlay: {type: 'callout', text: 'Luxury fruit → everyday fruit'}},
+    {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.6], parts: [{type: 'map', map: 'sea-route'}, {type: 'clock', mode: 'shrink', value: 0, unit: '', from: '4 hours', to: '15 min', label: 'Customs clearance at one border port', bg: ['container-ship', 'ai-border-checkpoint']}]}},
+    {source: 'Xinhua via The Star', tr: 'burn', overlay: {type: 'tag', price: '¥28/kg', label: 'Thai durian, one Kunming wholesale market, spring 2026', bg: ['kunming-market', 'ai-kunming-market']}},
+    {broll: ['supermarket-durian', 'ai-supermarket'], tr: 'whip', overlay: {type: 'callout', text: 'Luxury fruit → everyday fruit'}},
   ],
   '04-yellow-scandal': [
     {broll: ['china-market-durian', 'ai-packing-line'], overlay: {type: 'scribbles', items: [{text: 'make it look good', x: 1080, y: 170, delay: 50}]}},
@@ -117,13 +118,13 @@ export const SCENES: Record<string, Beat[]> = {
     {source: 'Produce Report, 12 Jan 2025', overlay: {type: 'seq', at: [0, 0.39, 0.81], parts: [{type: 'statover', value: 'Dye found', label: 'Chinese inspectors, start of 2025: Auramine O in Thai durians', ids: ['lab-testing']}, {type: 'doc', header: 'IMPORT INSPECTION · FRESH DURIAN', fields: [['from', '10 Jan 2025'], ['test 1', 'Auramine O'], ['test 2', 'cadmium'], ['result', 'batch turned away']], stamp: 'REJECTED'}, {type: 'statover', value: 'Turned away', label: 'Friendship Pass, the China–Vietnam border crossing', ids: ['friendship-pass']}]}},
     {source: 'Vietnamese press via Antidumping.vn; Tuoi Tre', overlay: {type: 'statover', value: '~20%', label: "of plan: Vietnam's durian exports to China, Jan–Apr 2025", sub: '> $500m → ~$125m', ids: ['border-trucks', 'vietnam-port-trucks', 'ai-durian-market']}},
     {source: 'Produce Report', overlay: {type: 'map', map: 'thai-labs'}},
-    {broll: ['thailand-durian-farm', ...MARKET], overlay: {type: 'callout', text: 'Their standards become your standards.'}},
+    {broll: ['ai-customs-lab'], overlay: {type: 'callout', text: 'Their standards become your standards.'}},
   ],
   '05-the-glut': [
     {broll: ['timelapse-growth', ...ORCHARD], tr: 'whip', overlay: {type: 'callout', text: '2026'}},
-    {overlay: {type: 'statover', value: '5–8 yrs', label: 'for a durian tree to reach full production', sub: 'the boom trees all matured together', ids: ORCHARD}},
+    {overlay: {type: 'statover', value: '5–8 yrs', label: 'for a durian tree to reach full production', sub: 'the boom trees all matured together', ids: ['ai-durian-tree']}},
     {source: 'FreshPlaza', overlay: {type: 'seq', at: [0, 0.44, 0.56], parts: [{type: 'bars', title: 'Supply surge, 2026', items: [{label: 'Thailand harvest (forecast)', value: 2.07, display: '2.07m t (+33%)'}]}, {type: 'statover', value: 'Malaysia', label: 'an unusually big harvest too', ids: ['malaysia-durian']}, {type: 'bars', title: 'Supply surge, 2026', items: [{label: 'Thailand harvest (forecast)', value: 2.07, display: '2.07m t (+33%)'}, {label: 'China imports, first half', value: 1.07, display: '1.07m t (+52%)', accent: true}]}]}},
-    {broll: MARKET, overlay: {type: 'callout', text: 'More fruit. Same customer.'}},
+    {broll: ['ai-unloading'], overlay: {type: 'callout', text: 'More fruit. Same customer.'}},
     {source: 'The Standard', tr: 'burn', overlay: {type: 'tag', old: 'last year', price: 'up to −50%', label: 'wholesale: premium Vietnamese & Malaysian durian', bg: ['price-board', ...MARKET]}},
     {source: 'The Standard, 11 May 2026', overlay: {type: 'phone', live: true, clips: ['ai-livestream', 'ai-durian-market'], counter: {label: 'durians sold on the livestream', value: 120000}, caption: 'farmers: furious'}},
     {overlay: {type: 'map', map: 'vietnam-warn'}},
@@ -131,14 +132,14 @@ export const SCENES: Record<string, Beat[]> = {
   '06-the-twist': [
     {overlay: {type: 'map', map: 'hainan'}},
     {broll: ['hainan-island', 'hainan-orchard', ...ORCHARD], overlay: {type: 'callout', text: 'China is growing its own.'}},
-    {source: 'AFP via The Vibes', overlay: {type: 'seq', at: [0, 0.45], parts: [{type: 'map', map: 'hainan-close'}, {type: 'statover', value: 'Tree-ripened', label: "Hainan's pitch vs imports picked early for the journey", ids: ['durian-closeup-spikes', 'ai-durian-closeup']}]}},
-    {broll: ORCHARD, tr: 'whip', overlay: {type: 'callout', text: 'Should Southeast Asia panic?'}},
+    {source: 'AFP via The Vibes', overlay: {type: 'seq', at: [0, 0.45], parts: [{type: 'map', map: 'hainan-close'}, {type: 'statover', value: 'Tree-ripened', label: "Hainan's pitch vs imports picked early for the journey", ids: ['ai-durian-closeup']}]}},
+    {broll: ['ai-farmer-worried'], tr: 'whip', overlay: {type: 'callout', text: 'Should Southeast Asia panic?'}},
     {source: 'FreshPlaza; AFP via The Vibes', overlay: {type: 'homegrown', label: 'Durian China eats, 2025', share: '<1%', cost: '¥ and it still costs more to grow', cardTitle: 'What a durian expert at Hainan’s agricultural academy told AFP:', cardText: 'Chinese durian will only ever be a supplement to Southeast Asian durian.', mark: 'a supplement', at: [36, 204, 282]}},
     {overlay: {type: 'callout', text: "It's the math."}},
   ],
   '07-close': [
-    {overlay: {type: 'map', map: 'highlands'}},
-    {overlay: {type: 'statover', value: '~90%', label: 'of global durian exports, one buyer', sub: 'prices · standards · speed', ids: MARKET}},
+    {overlay: {type: 'appetite', from: 2015, to: 2025, label: 'a decade of demand', target: 'CHINA', words: ['more', 'more.', 'MORE'], end: 'always?', endAt: 172}},
+    {overlay: {type: 'statover', value: '~90%', label: 'of global durian exports, one buyer', sub: 'prices · standards · speed', ids: ['ai-warehouse']}},
     {overlay: {type: 'timing', title: 'Timing is everything', split: 92, early: [2016, 2022], late: [2021, 2027], now: 2026}},
     {broll: ['coffee-and-durian', ...COFFEE, 'ai-durian-orchard'], overlay: {type: 'callout', text: '400 durian trees. And still, coffee.'}},
     {overlay: {type: 'map', map: 'world'}},

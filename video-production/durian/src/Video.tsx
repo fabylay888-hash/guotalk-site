@@ -1,12 +1,36 @@
 import React from 'react';
-import {AbsoluteFill, Audio, Easing, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Easing, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import timings from './timings.json';
-import {SCENES} from './scenes';
+import {SCENES, type Overlay} from './scenes';
 import {Broll, pickBroll} from './components/Broll';
 import {FULL_FRAME, OverlayView, SourceTag} from './components/Overlays';
 import {Grain, Paper} from './components/Paper';
 import {buildTimeline} from './timeline';
 import {C, FPS, MARKER, SANS, TYPE} from './theme';
+
+// Sound effects keyed to what appears on screen: [file in public/sfx, frame offset, volume].
+type Cue = [string, number, number];
+const cuesFor = (o: Overlay | undefined, len: number, at = 0): Cue[] => {
+  if (!o) return [];
+  switch (o.type) {
+    case 'seq': return o.parts.flatMap((p, k) => cuesFor(p, Math.round(len * ((o.at[k + 1] ?? 1) - o.at[k])), at + Math.round(len * o.at[k])));
+    case 'doc': return o.stamp ? [['stamp', at + 14 + o.fields.length * 16 + 6, 0.55]] : [];
+    case 'depart': return [['flap', at + 4, 0.35]];
+    case 'receipt': return [['receipt', at + 6, 0.35]];
+    case 'tag': case 'statover': case 'growth': case 'tonnage': return [['pop', at + 8, 0.3]];
+    case 'mapdive': return [['riser', at + Math.round(len * o.at) - 26, 0.35]];
+    default: return [];
+  }
+};
+const Sfx: React.FC<{cues: Cue[]}> = ({cues}) => (
+  <>
+    {cues.filter(([, f]) => f >= 0).map(([n, f, v], k) => (
+      <Sequence key={k} from={f} durationInFrames={75} layout="none">
+        <Audio src={staticFile(`sfx/${n}.mp3`)} volume={v} />
+      </Sequence>
+    ))}
+  </>
+);
 
 const Chapter: React.FC<{id: string; dur: number}> = ({id, dur}) => {
   const ch = timings.find((c) => c.id === id)!;
@@ -33,6 +57,7 @@ const Chapter: React.FC<{id: string; dur: number}> = ({id, dur}) => {
             </BeatIn>
             {beat.source ? <SourceTag text={beat.source} onPaper={onPaper} /> : null}
             {beat.tr === 'burn' ? <FilmBurn /> : null}
+            <Sfx cues={[...(beat.tr === 'whip' ? [['whoosh', 0, 0.35] as Cue] : []), ...(beat.tr === 'burn' ? [['burn', 0, 0.4] as Cue] : []), ...cuesFor(beat.overlay, len)]} />
           </Sequence>
         );
       })}
@@ -87,14 +112,15 @@ const ChapterCard: React.FC<{num: number; title: string}> = ({num, title}) => {
   const rise = interpolate(frame, [0, 12], [100, -6], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   const teeth = Array.from({length: 25}, (_, k) => `${k * 4.17}% ${rise + (k % 2 ? 3 : 0) + ((k * 37) % 5) * 0.6}%`).join(', ');
   return (
-    <AbsoluteFill style={{opacity: out, clipPath: `polygon(${teeth}, 100% 100%, 0% 100%)`}}>
-      <Paper>
-        <AbsoluteFill style={{justifyContent: 'center', paddingLeft: 170}}>
-          <div style={{fontFamily: TYPE, fontSize: 40, letterSpacing: 6, color: C.inkSoft, opacity: p}}>{num === 7 ? 'CLOSE' : `CHAPTER ${num}`}</div>
-          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 150, color: C.ink, letterSpacing: -5, opacity: p, transform: `translateX(${(1 - p) * -30}px)`, marginTop: 10}}>{title}</div>
-          <div style={{width: 420 * p, height: 12, background: C.marker, marginTop: 14, borderRadius: 6, transform: 'rotate(-0.8deg)'}} />
-        </AbsoluteFill>
-      </Paper>
+    <AbsoluteFill style={{opacity: out, clipPath: `polygon(${teeth}, 100% 100%, 0% 100%)`, background: C.bg}}>
+      {/* Original still for each chapter, slow push-in behind the title. */}
+      <Img src={staticFile(`chapters/bg-${String(num).padStart(2, '0')}.jpg`)} style={{position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${1.04 + 0.06 * (frame / durationInFrames)})`, filter: 'saturate(0.9) contrast(1.05)'}} />
+      <AbsoluteFill style={{background: 'linear-gradient(90deg, rgba(8,5,5,0.82) 0%, rgba(8,5,5,0.55) 45%, rgba(8,5,5,0.05) 80%)'}} />
+      <AbsoluteFill style={{justifyContent: 'center', paddingLeft: 170}}>
+        <div style={{fontFamily: TYPE, fontSize: 40, letterSpacing: 6, color: C.gold, opacity: p}}>{num === 7 ? 'CLOSE' : `CHAPTER ${num}`}</div>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 150, color: '#FFF8EC', letterSpacing: -5, opacity: p, transform: `translateX(${(1 - p) * -30}px)`, marginTop: 10, textShadow: '0 6px 30px rgba(0,0,0,0.5)'}}>{title}</div>
+        <div style={{width: 420 * p, height: 12, background: C.marker, marginTop: 14, borderRadius: 6, transform: 'rotate(-0.8deg)'}} />
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
@@ -122,21 +148,39 @@ const EndCard: React.FC = () => {
   );
 };
 
+// One score cue per chapter: it starts with the chapter card (or the title) and fades out as the chapter ends.
+const MUSIC_VOL = 0.16;
+const music = (segs: ReturnType<typeof buildTimeline>['segs']) => {
+  const out: {id: string; from: number; dur: number}[] = [];
+  segs.forEach((s, i) => {
+    if (s.kind !== 'chapter') return;
+    const prev = segs[i - 1];
+    const from = prev && (prev.kind === 'chapterCard' || prev.kind === 'title') ? prev.from : s.from;
+    const next = segs[i + 1];
+    const end = next && next.kind === 'end' ? next.from + next.dur : s.from + s.dur;
+    out.push({id: s.id, from, dur: end - from});
+  });
+  return out;
+};
+
 export const DurianVideo: React.FC = () => {
   const {segs} = buildTimeline();
   return (
     <AbsoluteFill style={{background: C.bg}}>
       {segs.map((s, i) => (
         <Sequence key={i} from={s.from} durationInFrames={s.dur} name={s.kind === 'chapter' ? s.id : s.kind}>
-          {s.kind === 'title' && <TitleCard />}
-          {s.kind === 'chapterCard' && <ChapterCard num={s.num} title={s.title} />}
+          {s.kind === 'title' && <><TitleCard /><Audio src={staticFile('sfx/riser.mp3')} volume={0.4} /></>}
+          {s.kind === 'chapterCard' && <><ChapterCard num={s.num} title={s.title} /><Audio src={staticFile('sfx/chapter.mp3')} volume={0.6} /></>}
           {s.kind === 'chapter' && <Chapter id={s.id} dur={s.dur} />}
           {s.kind === 'end' && <EndCard />}
         </Sequence>
       ))}
+      {music(segs).map((m) => (
+        <Sequence key={m.id} from={m.from} durationInFrames={m.dur} name={`music ${m.id}`} layout="none">
+          <Audio src={staticFile(`music/${m.id}.mp3`)} volume={(f) => MUSIC_VOL * interpolate(f, [0, 20, m.dur - 40, m.dur], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} />
+        </Sequence>
+      ))}
       <Grain />
-      {/* Optional music bed: drop public/music.mp3 and uncomment.
-      <Audio src={staticFile('music.mp3')} volume={0.08} loop /> */}
     </AbsoluteFill>
   );
 };
