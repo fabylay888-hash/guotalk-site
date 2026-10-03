@@ -48,8 +48,15 @@ Title check
 • Databoks: https://databoks.katadata.co.id/en/agroindustry/statistics/6c26e3acf9df502/indonesias-durian-production-decreased-in-2020
 
 🎞 Footage & images
-Stock footage: Pexels and Pixabay (free licence). [Add a credit line for every Wikimedia Commons file you use: "Title" by Author, CC BY-SA 4.0, via Wikimedia Commons.]
-Some scenes are AI-generated illustrations and are labelled on screen.
+Stock footage: Pexels and Pixabay (free licences). Some scenes are AI-generated illustrations.
+Archival photos via Wikimedia Commons (cropped and colour graded):
+• China–Laos Railway at Vientiane station: Dominik Landwehr, CC BY-SA 4.0
+• Mohan–Boten border monument: Fuwuyuan, CC BY-SA 3.0
+• Durian Fruit in Yunnan: Rod Waddington, CC BY-SA 2.0
+• Durian Musang King: Rruunnaa, CC BY 4.0
+• Haitang Bay in Sanya: Charlie fong, CC BY-SA 4.0
+Licences: creativecommons.org/licenses/by-sa/4.0 · /by-sa/3.0 · /by-sa/2.0 · /by/4.0
+(Delete any line whose photo doesn't make the final cut.)
 
 #China #Durian #Vietnam #Thailand #Trade #GuoTalk
 
