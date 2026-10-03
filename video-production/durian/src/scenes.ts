@@ -28,6 +28,7 @@ export type Overlay =
   | {type: 'split'; left: {ids?: string[]; label: string; value: string}; right: {ids?: string[]; label: string; value: string}; title?: string}
   | {type: 'statover'; value: string; label: string; sub?: string; ids?: string[]; center?: boolean}
   | {type: 'mapdive'; map: string; ids?: string[]; at: number}
+  | {type: 'tonnage'; value: number; unit: string; caption: string; prevLabel: string; curLabel: string; times: string; note: string}
   | {type: 'growth'; fromLabel: string; toLabel: string; toValue: number; prefix: string; suffix: string; times: string; caption: string; ids?: string[]}
   // Several full-frame graphics back to back inside one paragraph; `at` = start fractions.
   | {type: 'seq'; parts: Overlay[]; at: number[]};
@@ -103,7 +104,7 @@ export const SCENES: Record<string, Beat[]> = {
     {broll: ['durian-orchard', 'ai-packing-line'], source: 'Produce Report', overlay: {type: 'scribbles', items: [{text: 'picked before ripe', x: 980, y: 180, delay: 30}]}},
     {broll: ['highway-trucks', 'ai-truck-clock'], tr: 'whip', overlay: {type: 'callout', text: 'Faster.'}},
     {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.42, 0.68], parts: [{type: 'map', map: 'rail'}, {type: 'statover', value: '26 h', label: 'Thailand → Kunming on the China–Laos Railway', ids: ['china-laos-railway', 'ai-freight-train']}, {type: 'map', map: 'cities'}]}},
-    {source: 'Xinhua via The Star', tr: 'whip', overlay: {type: 'depart', title: 'KUNMING · COLD-CHAIN FREIGHT · DURIAN', rows: [['06:10', 'VIENTIANE', 'ON TIME'], ['09:40', 'VIENTIANE', 'ON TIME'], ['13:05', 'BOTEN', 'ON TIME'], ['16:30', 'VIENTIANE', 'ON TIME'], ['20:15', 'BOTEN', 'ON TIME'], ['23:50', 'VIENTIANE', 'ON TIME']], footer: 'up to 6 trains a day · 50,300 t of durian, Jan–Apr 2026 (≈2× a year earlier)'}},
+    {source: 'Xinhua via The Star', tr: 'whip', overlay: {type: 'seq', at: [0, 0.34], parts: [{type: 'depart', title: 'KUNMING · COLD-CHAIN FREIGHT · DURIAN', rows: [['06:10', 'VIENTIANE', 'ON TIME'], ['09:40', 'VIENTIANE', 'ON TIME'], ['13:05', 'BOTEN', 'ON TIME'], ['16:30', 'VIENTIANE', 'ON TIME'], ['20:15', 'BOTEN', 'ON TIME'], ['23:50', 'VIENTIANE', 'ON TIME']], footer: 'peak season: up to 6 trains a day (was 2)'}, {type: 'tonnage', value: 50300, unit: 't', caption: 'Durian carried on the China–Laos Railway', prevLabel: 'Jan–Apr 2025', curLabel: 'Jan–Apr 2026', times: '≈2×', note: 'almost double'}]}},
     {source: 'Xinhua via The Star', overlay: {type: 'seq', at: [0, 0.6], parts: [{type: 'map', map: 'sea-route'}, {type: 'clock', mode: 'shrink', value: 0, unit: '', from: '4 hours', to: '15 min', label: 'Customs clearance at one border port', bg: ['container-ship', 'border-trucks', 'ai-durian-market']}]}},
     {source: 'Xinhua via The Star', tr: 'burn', overlay: {type: 'tag', price: '¥28/kg', label: 'Thai durian, one Kunming wholesale market, spring 2026', bg: MARKET}},
     {broll: ['supermarket-durian', ...MARKET], tr: 'whip', overlay: {type: 'callout', text: 'Luxury fruit → everyday fruit'}},

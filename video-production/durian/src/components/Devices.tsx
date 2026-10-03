@@ -490,3 +490,94 @@ export const Growth: React.FC<{fromLabel: string; toLabel: string; toValue: numb
     </Paper>
   );
 };
+
+// Two freight trains pull into Kunming: last year's (7 wagons) and this year's (12, "almost double").
+const Wagon: React.FC<{x: number; y: number; w: number; color: string; load: boolean; spin: number}> = ({x, y, w, color, load, spin}) => (
+  <div style={{position: 'absolute', left: x, top: y, width: w, height: 110}}>
+    {load && [0.2, 0.5, 0.8].map((p, i) => (
+      <div key={i} style={{position: 'absolute', left: w * p - 24, top: -14 + (i % 2) * 6}}><DurianIcon size={48} color={C.gold} /></div>
+    ))}
+    <div style={{position: 'absolute', left: 0, top: 18, width: w, height: 62, background: color, border: `4px solid ${C.ink}`, borderRadius: 6, boxSizing: 'border-box'}}>
+      <div style={{position: 'absolute', left: 8, right: 8, top: 22, height: 4, background: 'rgba(255,255,255,0.35)'}} />
+    </div>
+    {[0.24, 0.76].map((p, i) => (
+      <svg key={i} width={34} height={34} viewBox="-17 -17 34 34" style={{position: 'absolute', left: w * p - 17, top: 76, transform: `rotate(${spin}deg)`}}>
+        <circle r={14} fill={C.ink} /><circle r={5} fill={C.paper} /><path d="M -14 0 H 14 M 0 -14 V 14" stroke={C.paper} strokeWidth={2} />
+      </svg>
+    ))}
+  </div>
+);
+
+const Train: React.FC<{y: number; n: number; color: string; off: number; label: string; dim?: boolean}> = ({y, n, color, off, label, dim}) => {
+  const x0 = 210, W = 104, G = 10, L = 150;
+  const spin = -off * 2.2;
+  return (
+    <>
+      <div style={{position: 'absolute', left: 120, right: 60, top: y + 112, height: 6, background: C.ink, opacity: 0.85}} />
+      {Array.from({length: 34}).map((_, i) => (
+        <div key={i} style={{position: 'absolute', left: 130 + i * 52, top: y + 106, width: 10, height: 18, background: C.inkSoft, opacity: 0.5}} />
+      ))}
+      <div style={{position: 'absolute', left: 120, top: y - 70, fontFamily: TYPE, fontSize: 36, color: C.ink, opacity: dim ? 0.75 : 1}}>{label}</div>
+      <div style={{position: 'absolute', left: 0, top: 0, transform: `translateX(${off}px)`, opacity: dim ? 0.8 : 1}}>
+        {/* locomotive */}
+        <div style={{position: 'absolute', left: x0, top: y + 4, width: L, height: 76, background: C.paper, border: `4px solid ${C.ink}`, borderRadius: '44px 8px 6px 6px', boxSizing: 'border-box', overflow: 'hidden'}}>
+          <div style={{position: 'absolute', left: 0, right: 0, top: 40, height: 10, background: color}} />
+          <div style={{position: 'absolute', left: 26, top: 12, width: 38, height: 20, background: C.ink, borderRadius: '14px 4px 4px 4px'}} />
+        </div>
+        {[0.3, 0.75].map((p, i) => (
+          <svg key={i} width={34} height={34} viewBox="-17 -17 34 34" style={{position: 'absolute', left: x0 + L * p - 17, top: y + 76, transform: `rotate(${spin}deg)`}}>
+            <circle r={14} fill={C.ink} /><circle r={5} fill={C.paper} /><path d="M -14 0 H 14 M 0 -14 V 14" stroke={C.paper} strokeWidth={2} />
+          </svg>
+        ))}
+        {Array.from({length: n}).map((_, i) => (
+          <Wagon key={i} x={x0 + L + G + i * (W + G)} y={y} w={W} color={color} load spin={spin} />
+        ))}
+      </div>
+    </>
+  );
+};
+
+export const RailTonnage: React.FC<{value: number; unit: string; caption: string; prevLabel: string; curLabel: string; times: string; note: string; dur: number}> = ({value, unit, caption, prevLabel, curLabel, times, note, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const in1 = interpolate(frame, [0, 36], [1, 0], {...clamp, easing: Easing.out(Easing.cubic)});
+  const in2 = interpolate(frame, [24, 112], [1, 0], {...clamp, easing: Easing.out(Easing.cubic)});
+  const count = Math.round((value * (1 - in2)) / 100) * 100;
+  const pop = spring({frame: frame - 112, fps, config: {damping: 9, stiffness: 160}});
+  const mark = spring({frame: frame - 128, fps, config: {damping: 12, stiffness: 140}});
+  const capIn = useIn(4);
+  const push = interpolate(frame, [0, dur], [1, 1.05], clamp);
+  const W = 104, G = 10, L = 150, x0 = 210;
+  const end1 = x0 + L + G + 7 * (W + G) - G;
+  const end2 = x0 + L + G + 12 * (W + G) - G;
+  const y1 = 290, y2 = 560;
+  return (
+    <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '30% 55%'}}>
+        {/* Kunming station post */}
+        <div style={{position: 'absolute', left: 60, top: 190, width: 14, height: 520, background: C.ink}} />
+        <div style={{position: 'absolute', left: 30, top: 150, padding: '6px 14px', background: C.ink, color: C.paper, fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 2}}>
+          <span style={{fontFamily: CJK, marginRight: 10}}>昆明</span>KUNMING
+        </div>
+        <Train y={y1} n={7} color={C.inkSoft} off={in1 * 1900} label={prevLabel} dim />
+        <Train y={y2} n={12} color={C.marker} off={in2 * 1900} label={curLabel} />
+        {/* almost-double bracket */}
+        <svg width={1920} height={1080} style={{position: 'absolute', opacity: mark}}>
+          <path d={`M ${end1} ${y1 + 130} V ${y2 + 150}`} stroke={C.ink} strokeWidth={4} strokeDasharray="12 10" />
+          <path d={`M ${end2} ${y2 + 130} V ${y2 + 150}`} stroke={C.ink} strokeWidth={4} />
+          <path d={`M ${end1} ${y2 + 150} H ${end1 + (end2 - end1) * mark}`} stroke={C.marker} strokeWidth={8} strokeLinecap="round" />
+        </svg>
+        <div style={{position: 'absolute', left: end1 + 30, top: y2 + 168, fontFamily: MARKER, fontSize: 92, color: C.marker, transform: `rotate(-6deg) scale(${0.4 + 0.6 * mark})`, transformOrigin: 'left top', opacity: mark}}>
+          {times} <span style={{fontFamily: HAND, fontSize: 56, color: C.ink}}>{note}</span>
+        </div>
+        {/* tonnage counter */}
+        <div style={{position: 'absolute', left: 120, top: y2 + 160, fontFamily: SANS, fontWeight: 800, fontSize: 168, letterSpacing: -6, color: C.ink, fontVariantNumeric: 'tabular-nums', transform: `scale(${1 + 0.08 * pop * (1 - mark)})`, transformOrigin: 'left center', opacity: in2 < 1 ? 1 : 0}}>
+          {count.toLocaleString('en-US')}<span style={{fontSize: 84, marginLeft: 14, color: C.marker}}>{unit}</span>
+        </div>
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 50, textAlign: 'center', opacity: capIn}}>
+        <span style={{fontFamily: TYPE, fontSize: 42, color: C.ink, borderBottom: `3px solid ${C.ink}`, paddingBottom: 6}}>{caption}</span>
+      </div>
+    </Paper>
+  );
+};
