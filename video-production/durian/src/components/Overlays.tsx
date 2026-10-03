@@ -278,7 +278,7 @@ export const OverlayView: React.FC<{o: Overlay; dur: number; onPaper: boolean}> 
     case 'stamp': return <Stamp {...o} />;
     case 'location': return <Location {...o} />;
     case 'map': return <MapScene spec={MAPS[o.map]} dur={dur} />;
-    case 'grid': return <IconGrid {...o} />;
+    case 'grid': return <IconGrid {...o} dur={dur} />;
     case 'receipt': return <Receipt {...o} dur={dur} />;
     case 'tag': return <PriceTag {...o} dur={dur} />;
     case 'clock': return <Clock {...o} dur={dur} />;

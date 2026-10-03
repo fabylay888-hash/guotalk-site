@@ -35,10 +35,16 @@ export const DurianIcon: React.FC<{size: number; color: string}> = ({size, color
   );
 };
 
-export const IconGrid: React.FC<{n: number; label: string; sub?: string; hitColor?: string; target?: string}> = ({n, label, sub, hitColor = C.marker, target = 'CHINA'}) => {
+export const IconGrid: React.FC<{n: number; label: string; sub?: string; hitColor?: string; target?: string; big?: string; dur?: number}> = ({n, label, sub, hitColor = C.marker, target = 'CHINA', big, dur = 300}) => {
   const frame = useCurrentFrame();
   const p = useIn(0);
   const subIn = useIn(70);
+  // After the flight: slow camera push, the box pulses, the big number counts up.
+  const landed = 24 + n * 0.5 + 26;
+  const push = interpolate(frame, [landed, dur], [1, 1.08], clamp);
+  const pulse = 1 + 0.03 * Math.sin(Math.max(0, frame - landed) / 6) * Math.exp(-Math.max(0, frame - landed) / 90);
+  const bigIn = useIn(landed + 4);
+  const bigNum = Math.round(interpolate(frame, [landed + 4, landed + 34], [0, parseFloat((big ?? '0').replace(/[^\d.]/g, '')) || 0], {...clamp, easing: Easing.out(Easing.cubic)}));
   const cell = 64;
   const gx = 170;
   const gy = 190;
@@ -46,6 +52,7 @@ export const IconGrid: React.FC<{n: number; label: string; sub?: string; hitColo
   const ty = 470;
   return (
     <Paper>
+      <AbsoluteFill style={{transform: `scale(${push})`, transformOrigin: '60% 55%'}}>
       {Array.from({length: 100}).map((_, i) => {
         const col = i % 10;
         const row = Math.floor(i / 10);
@@ -60,16 +67,22 @@ export const IconGrid: React.FC<{n: number; label: string; sub?: string; hitColo
         const tint = hit ? interpolate(frame, [start - 10, start], [0, 1], clamp) : 0;
         const pop = interpolate(frame, [i * 0.25, i * 0.25 + 8], [0, 1], clamp);
         return (
-          <div key={i} style={{position: 'absolute', left: x0 + (x1 - x0) * fly, top: y0 + (y1 - y0) * fly, transform: `scale(${pop * (1 - 0.25 * fly)}) rotate(${fly * random(`r${i}`) * 90}deg)`}}>
+          <div key={i} style={{position: 'absolute', left: x0 + (x1 - x0) * fly, top: y0 + (y1 - y0) * fly, transform: `scale(${pop * (1 - 0.25 * fly)}) rotate(${fly * random(`r${i}`) * 90 + (hit ? 0 : Math.sin((frame + i * 7) / 8) * 6)}deg)`}}>
             <DurianIcon size={54} color={tint > 0.5 ? hitColor : '#9BA05A'} />
           </div>
         );
       })}
       {target ? (
-        <div style={{position: 'absolute', left: tx, top: ty, width: 420, height: 300, border: `5px solid ${C.ink}`, borderTop: 'none', borderRadius: '0 0 20px 20px', opacity: p}}>
+        <div style={{position: 'absolute', left: tx, top: ty, width: 420, height: 300, border: `5px solid ${C.ink}`, borderTop: 'none', borderRadius: '0 0 20px 20px', opacity: p, transform: `scale(${pulse})`}}>
           <div style={{position: 'absolute', top: -70, left: 0, right: 0, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 56, color: C.ink, letterSpacing: 4}}>{target}</div>
         </div>
       ) : null}
+      {big ? (
+        <div style={{position: 'absolute', left: 220, top: 260, width: 760, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 280, color: hitColor, letterSpacing: -6, opacity: bigIn, transform: `scale(${0.8 + 0.2 * bigIn})`}}>
+          {big.replace(/[\d.]+/, String(bigNum))}
+        </div>
+      ) : null}
+      </AbsoluteFill>
       <div style={{position: 'absolute', left: 170, top: 60, fontFamily: SANS, fontWeight: 800, fontSize: 66, color: C.ink, opacity: p, letterSpacing: -2}}>{label}</div>
       {sub ? <div style={{position: 'absolute', left: 170, bottom: 60, fontFamily: MARKER, fontSize: 46, color: C.marker, opacity: subIn, transform: 'rotate(-2deg)'}}>{sub}</div> : null}
     </Paper>
@@ -375,7 +388,7 @@ export const Split: React.FC<{left: {ids?: string[]; label: string; value: strin
 };
 
 /* ---------------- Big number over real footage (lower third) ---------------- */
-export const StatOver: React.FC<{value: string; label: string; sub?: string; ids?: string[]; dur: number}> = ({value, label, sub, ids, dur}) => {
+export const StatOver: React.FC<{value: string; label: string; sub?: string; ids?: string[]; dur: number; center?: boolean}> = ({value, label, sub, ids, dur, center}) => {
   const frame = useCurrentFrame();
   const bar = interpolate(frame, [4, 18], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
   const v = useIn(10);
@@ -384,10 +397,10 @@ export const StatOver: React.FC<{value: string; label: string; sub?: string; ids
   return (
     <AbsoluteFill>
       <Media ids={ids} dur={dur} />
-      <AbsoluteFill style={{background: 'linear-gradient(0deg, rgba(8,5,5,0.85) 0%, rgba(8,5,5,0.3) 45%, transparent 70%)'}} />
-      <div style={{position: 'absolute', left: 110, bottom: 110}}>
-        <div style={{width: 260 * bar, height: 10, background: C.marker, marginBottom: 20}} />
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 170, color: '#fff', letterSpacing: -6, lineHeight: 0.95, opacity: v, transform: `translateY(${(1 - v) * 30}px)`}}>{value}</div>
+      <AbsoluteFill style={{background: center ? 'radial-gradient(ellipse at center, rgba(8,5,5,0.6) 0%, rgba(8,5,5,0.35) 60%, rgba(8,5,5,0.55) 100%)' : 'linear-gradient(0deg, rgba(8,5,5,0.85) 0%, rgba(8,5,5,0.3) 45%, transparent 70%)'}} />
+      <div style={center ? {position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', textAlign: 'center'} : {position: 'absolute', left: 110, bottom: 110}}>
+        <div style={{width: 260 * bar, height: 10, background: C.marker, marginBottom: 20, marginLeft: center ? 'auto' : 0, marginRight: center ? 'auto' : 0}} />
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: center ? 260 : 170, color: '#fff', letterSpacing: -6, lineHeight: 0.95, opacity: v, transform: `translateY(${(1 - v) * 30}px)`, textShadow: '0 6px 30px rgba(0,0,0,0.5)'}}>{value}</div>
         <div style={{display: 'inline-block', fontFamily: TYPE, fontSize: 42, color: C.ink, background: C.paper, padding: '8px 20px', marginTop: 18, opacity: l}}>{label}</div>
         {sub ? <div style={{fontFamily: MARKER, fontSize: 40, color: C.gold, marginTop: 16, opacity: s}}>{sub}</div> : null}
       </div>
