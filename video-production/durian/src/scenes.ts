@@ -120,7 +120,7 @@ export const SCENES: Record<string, Beat[]> = {
   '05-the-glut': [
     {broll: ['timelapse-growth', ...ORCHARD], tr: 'whip', overlay: {type: 'callout', text: '2026'}},
     {overlay: {type: 'statover', value: '5–8 yrs', label: 'for a durian tree to reach full production', sub: 'the boom trees all matured together', ids: ORCHARD}},
-    {source: 'FreshPlaza', overlay: {type: 'bars', title: 'Supply surge, 2026', items: [{label: 'Thailand harvest (forecast)', value: 2.07, display: '2.07m t (+33%)'}, {label: 'China imports, first half', value: 1.07, display: '1.07m t (+52%)', accent: true}]}},
+    {source: 'FreshPlaza', overlay: {type: 'seq', at: [0, 0.44, 0.56], parts: [{type: 'bars', title: 'Supply surge, 2026', items: [{label: 'Thailand harvest (forecast)', value: 2.07, display: '2.07m t (+33%)'}]}, {type: 'statover', value: 'Malaysia', label: 'an unusually big harvest too', ids: ['malaysia-durian']}, {type: 'bars', title: 'Supply surge, 2026', items: [{label: 'Thailand harvest (forecast)', value: 2.07, display: '2.07m t (+33%)'}, {label: 'China imports, first half', value: 1.07, display: '1.07m t (+52%)', accent: true}]}]}},
     {broll: MARKET, overlay: {type: 'callout', text: 'More fruit. Same customer.'}},
     {source: 'The Standard', tr: 'burn', overlay: {type: 'tag', old: 'last year', price: 'up to −50%', label: 'wholesale: premium Vietnamese & Malaysian durian', bg: ['price-board', ...MARKET]}},
     {source: 'The Standard, 11 May 2026', overlay: {type: 'phone', live: true, clips: ['ai-livestream', 'ai-durian-market'], counter: {label: 'durians sold on the livestream', value: 120000}, caption: 'farmers: furious'}},

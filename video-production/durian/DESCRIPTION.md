@@ -50,7 +50,7 @@ Title check
 🎞 Footage & images
 Stock footage: Pexels and Pixabay (free licences). Some scenes are AI-generated illustrations.
 Archival photos via Wikimedia Commons (cropped and colour graded):
-• China–Laos Railway "Lane Xang" train: [CONFIRM SOURCE & LICENCE]
+• China–Laos Railway at Vientiane station: Dominik Landwehr, CC BY-SA 4.0
 • Mohan–Boten border monument: Fuwuyuan, CC BY-SA 3.0
 • Durian Fruit in Yunnan: Rod Waddington, CC BY-SA 2.0
 • Durian Musang King: Rruunnaa, CC BY 4.0
